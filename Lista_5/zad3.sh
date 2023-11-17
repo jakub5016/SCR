@@ -1,1 +1,0 @@
-mknod potok p
