@@ -3,8 +3,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #define FIFO "/tmp/potok"
-#define MESS \
-"To jest komunikat serwera\n"
+
 
 int main(int argc, char **argv) {
     /**
@@ -23,29 +22,33 @@ int main(int argc, char **argv) {
     int counter = 1; // Zmienna do przechodenia po wywołaniach
     FILE * f;
 
+    int send_bufor = 3;   
+    char c;
+    char result[send_bufor];
+    int current_size = 0; // Jak dużo bufora już zapisano
+
     while (counter < argc)
     {
-        int send_bufor = 3;   
-        char c;
-        char result[send_bufor];
-        int current_size = 0; // Jak dużo bufora już zapisano
-
         f = fopen(argv[counter], "r");
+        current_size = 0;
+
         while(1) { // Wysyłanie pliku w częsciach.
-            current_size = (current_size +1)%send_bufor;
-            if( feof(f) ) {break;}
-            
-            c = fgetc(f);
+            if( feof(f)  || ((int)(c = fgetc(f)) == -49)) {write(potok_fd, result, current_size-1);break;}
+            // -49 ponieważ znak pojawia sie znak � na koncu pliku tekstowego
             result[current_size] = c;
+            
             if (current_size == (send_bufor-1)){
-                printf("Wysylan %s\n", result);
                 write(potok_fd, result, send_bufor);
             }
+            current_size = (current_size +1)%send_bufor;
 
         }
-
+        fclose(f);
         counter++;
+        sleep(1);
+
     }
+
 
     return 0;
 }

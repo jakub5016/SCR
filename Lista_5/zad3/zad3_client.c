@@ -1,16 +1,15 @@
 #include <fcntl.h>
-#define FIFO "/tmp/potok"
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdio.h>
+
+#define FIFO "/tmp/potok"
 
 int main() {
-    
     int potok_fd, licz;
-    char bufor[BUFSIZ];
+    char bufor[100];
     potok_fd = open(FIFO, O_RDONLY);
-    while ((licz=read(potok_fd, bufor,BUFSIZ)) > 0){
+    while ((licz=read(potok_fd, bufor,100)) > 0){
         write(1, bufor, licz);
     }
-
 }
