@@ -6,6 +6,10 @@
 #define FIFO "/tmp/potok"
 
 int main() {
+    /**
+     * Skrypt odczytuje z potoku pod adresem /tmp/potok. 
+     * Można używać zamiennie z komendą "tail -f /tmp/potok".
+    */
     int potok_fd, licz;
     char bufor[100];
     potok_fd = open(FIFO, O_RDONLY);

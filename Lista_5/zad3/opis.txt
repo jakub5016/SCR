@@ -1,0 +1,6 @@
+Utworzono skrypt zad3_serv.c który wysyła pliki do potoku o nazwie "potok" zlokalizowanego w folderze /tmp.
+Aby uruchomić program należy najpierw utworzyć potok komendą "mknod /tmp/potok p".
+Następnie należy uruchomić dwa terminale, w jednym należy uruchomić skrypt zad3_serv.c, w drugim 
+komednę tail -f /tmp/potok (lub skrypt zad3_client.c). 
+Pliki do skryptu zad3_serv należy podać w argumentach wywołania
+
