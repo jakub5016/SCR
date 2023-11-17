@@ -1,0 +1,9 @@
+Analogicznie do zadania 1e należy skorzystać z komendy "truss -t read  -p {PID}" oraz tego samego skryptu
+hello.sh 
+
+read(0, 0xFFBFEF57, 1)          (sleeping...)
+read(0, "1B", 1)                                = 1
+read(0, " [", 1)                                = 1
+read(0, " A", 1)                                = 1
+read(0, "\r", 1)                                = 1
+read(0, 0xFFBFEF57, 1)          (sleeping...)

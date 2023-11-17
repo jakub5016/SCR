@@ -1,0 +1,1 @@
+Kiedy nie istnieje żadnen sleep proces zajmuje 100% cpu, kiedy dodano nanosleep(100) zajmuje mniej niż 1% CPU

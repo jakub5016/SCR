@@ -1,0 +1,24 @@
+W systemie Linux:
+Aby sprawdzić tablicę akcji przypisanych poszczególnym sygnałom dla uruchomionego procesu, 
+należy otworzyć plik o ścieżce /proc/{ PID }/status. W tym pliku możemy znaleźć informacje
+min. na temat aktualnego stanu procesu, jego PID i PPID oraz rozmiarze zajmowanej pamięci. 
+W pliku są również zawarte informacje na temat aktualnie blokowanych/ignorowanych sygnałów
+zapisane w liniach SigBlk, oraz SigIgn.
+
+W wyniku działania programu z zadania 2 podczas blokowania liczba pod SigBlk zmieniła się
+z samych 0 na 2 na trzecim miejcu od prawej. Jest to prawdopodobnie zakodowany sposób zapisania
+syganału SIGUSR1 który jest blokowany przez program z zad2.
+
+SigBlk: 0000000000000200
+SigBlk: 0000000000000000
+
+W systemie solaris należy użyć komendy psig ponieważ normalnie w folderze /proc dane
+są zakodowane i nie można skorzystać z pliku "status" w ten sam sposób.
+
+Komenda psig daje rezultat w postaci opisu jak wygląda obsługa poszególnych sygnałów
+SYS     default
+PIPE    default
+ALRM    caught  handler         RESETHAND,NODEFER
+TERM    caught  handler         RESETHAND,NODEFER
+USR1    blocked,caught  handler         RESETHAND,NODEFER
+USR2    default

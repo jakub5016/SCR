@@ -1,0 +1,5 @@
+Na podstawie komendy "strace -e trace=signal ./mili", koniec komunikatu wygląda następująco:
+--- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_MAPERR, si_addr=0x558826a87000} ---
++++ killed by SIGSEGV +++
+
+Jak widać program został zabity przez SIGSEGV.

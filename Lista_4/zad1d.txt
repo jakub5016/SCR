@@ -1,0 +1,11 @@
+Przy wywoływaniu strace nie możemy zauważyć wywołania getenv, natomiast przy ltrace widzimy 
+
+
+getenv("LOGNAME")                                                                      = "jgil"
+printf("Hello %s\n", "jgil"Hello jgil
+)                                                           = 11
++++ exited (status 0) +++
+
+
+ltrace jest narzędziem podobnym do strace, z tą różnicą, że śledzi wywołania funkcji bibliotecznych (l- jak library).
+

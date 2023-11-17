@@ -1,0 +1,41 @@
+Użyta komenda:
+
+echo $$ ; while true; do sleep 1; echo "Komunikat" ; done | cat | cat
+
+Jeśli znajdziemy PID wszystkich procesów możemy wejść w /proc/PID/fd a tam włączyć komende " ls -l ". 
+Jeżeli plik 0 lub 1 jest zlinkowany do pipeline to wiemy że nasza komenda do niego należy. 
+Jeżeli oba są zajęte to jest to środkowa komenda jeżeli tylko jeden to ostatnia. 
+To samo można zrobić na systemie Solaris.
+
+
+jakub@LENOVO-Jakub:/proc/718/fd$ ls -l
+total 0
+lrwx------ 1 jakub jakub 64 Nov  2 12:57 0 -> /dev/pts/6
+lrwx------ 1 jakub jakub 64 Nov  2 12:57 1 -> /dev/pts/6
+l-wx------ 1 jakub jakub 64 Nov  2 12:57 19 -> /home/jakub/.vscode-server/data/logs/20231102T125748/ptyhost.log
+lrwx------ 1 jakub jakub 64 Nov  2 12:57 2 -> /dev/pts/6
+l-wx------ 1 jakub jakub 64 Nov  2 12:57 20 -> /home/jakub/.vscode-server/data/logs/20231102T125748/remoteagent.log
+l-wx------ 1 jakub jakub 64 Nov  2 12:57 25 -> /home/jakub/.vscode-server/data/logs/20231102T125748/network.log
+lrwx------ 1 jakub jakub 64 Nov  2 12:57 255 -> /dev/pts/6
+jakub@LENOVO-Jakub:/proc/718/fd$ cd ../17367
+bash: cd: ../17367: No such file or directory
+jakub@LENOVO-Jakub:/proc/718/fd$ cd ../../17367
+jakub@LENOVO-Jakub:/proc/17367$ cd fd
+jakub@LENOVO-Jakub:/proc/17367/fd$ ls -l
+total 0
+lr-x------ 1 jakub jakub 64 Nov  2 14:40 0 -> 'pipe:[194468]'
+l-wx------ 1 jakub jakub 64 Nov  2 14:40 1 -> 'pipe:[194470]'
+l-wx------ 1 jakub jakub 64 Nov  2 14:40 19 -> /home/jakub/.vscode-server/data/logs/20231102T125748/ptyhost.log
+lrwx------ 1 jakub jakub 64 Nov  2 14:40 2 -> /dev/pts/6
+l-wx------ 1 jakub jakub 64 Nov  2 14:40 20 -> /home/jakub/.vscode-server/data/logs/20231102T125748/remoteagent.log
+l-wx------ 1 jakub jakub 64 Nov  2 14:40 25 -> /home/jakub/.vscode-server/data/logs/20231102T125748/network.log
+jakub@LENOVO-Jakub:/proc/17367/fd$ cd ../../17368
+jakub@LENOVO-Jakub:/proc/17368$ cd fd
+jakub@LENOVO-Jakub:/proc/17368/fd$ ls -l
+total 0
+lr-x------ 1 jakub jakub 64 Nov  2 14:40 0 -> 'pipe:[194470]'
+lrwx------ 1 jakub jakub 64 Nov  2 14:40 1 -> /dev/pts/6
+l-wx------ 1 jakub jakub 64 Nov  2 14:40 19 -> /home/jakub/.vscode-server/data/logs/20231102T125748/ptyhost.log
+lrwx------ 1 jakub jakub 64 Nov  2 14:40 2 -> /dev/pts/6
+l-wx------ 1 jakub jakub 64 Nov  2 14:40 20 -> /home/jakub/.vscode-server/data/logs/20231102T125748/remoteagent.log
+l-wx------ 1 jakub jakub 64 Nov  2 14:40 25 -> /home/jakub/.vscode-server/data/logs/20231102T125748/network.log

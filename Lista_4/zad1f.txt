@@ -1,0 +1,2 @@
+Pico otwiera pliki tylko w momencie kiedy musi coś do niego zapisać lub coś z niego odczytać.
+Skorzystano z komendy  strace -e trace=file -p {PID} gdzie PID to PID pico.

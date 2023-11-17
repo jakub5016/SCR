@@ -1,0 +1,7 @@
+jgil@diablo:~$ truss -t write ls
+Desktop           Obrazy            Pulpit            a.out             cpois_263455      hello_world       zad2.c
+write(1, " D e s k t o p          ".., 115)     = 115
+Dokumenty         Pobrane           Szablony          aaa.txt           dead.letter       hello_world.c
+write(1, " D o k u m e n t y      ".., 104)     = 104
+Muzyka            Publiczny         Wideo             big.sh            hello.sh          truss_output.txt
+write(1, " M u z y k a            ".., 107)     = 107

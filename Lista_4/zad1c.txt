@@ -1,0 +1,17 @@
+Aby sprawdzić deskryptory plików należy wykorzystać komende
+strace -e trace=file ./hello_world
+
+execve("./hello_world", ["./hello_world"], 0x7ffd73847240 /* 35 vars */) = 0
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+newfstatat(3, "", {st_mode=S_IFREG|0644, st_size=21503, ...}, AT_EMPTY_PATH) = 0
+openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+newfstatat(3, "", {st_mode=S_IFREG|0755, st_size=2216304, ...}, AT_EMPTY_PATH) = 0
+newfstatat(1, "", {st_mode=S_IFCHR|0620, st_rdev=makedev(0x88, 0xc), ...}, AT_EMPTY_PATH) = 0
+
+Deskryptory to 0 oraz 3
+
+Proces po uruchomieniu ma od razu 3 deskryptory, przypisane do standardowych strumieni :
+- 0 dla standardowego wejścia, 
+- 1 dla standardowego wyjścia
+- 2 dla standardowego wyjścia błędów.

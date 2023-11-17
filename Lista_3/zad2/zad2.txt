@@ -1,0 +1,6 @@
+Program ignoruje sygnał SIGALRM, wyświetla komunikat i kończy prace na sygnał SIGTERM,
+wyświetal komunikat na SIGUSR1 oraz włącza i wyłącza blokowanie sygnału SIGUSR1 za pomocą
+syganału SIGUSR2.
+
+Program pomimo blokowania syganłu SIGUSR1 otrzymuje go po zdjęciu blokady. 
+Sygnał czeka na zdjęcie blokady.

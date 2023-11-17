@@ -1,0 +1,18 @@
+Należy wykorzystać komende "strace -p [pid] -e trace=read" w jednym terminalu a w drugim do którego podajemy pid 
+uruchomić prosty skrypt w bash taki jak "hello.sh"
+
+read(3, "# POSIX sh(1) completion        "..., 879) = 879
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=29764, si_uid=1000, si_status=1, si_utime=0, si_stime=0} ---
+read(3, "set +o noglob\n", 512)         = 14
+read(3, "", 512)                        = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=29765, si_uid=1000, si_status=0, si_utime=0, si_stime=1} ---
+read(3, "hello.sh\n", 512)              = 9
+read(3, "", 512)                        = 0
+read(0, "\r", 1)                        = 1
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=29776, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+read(3, "sh hello.sh\n", 512)           = 12
+read(3, "", 512)                        = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=29777, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=29778, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+read(3, "/home/jakub/scr/Lista_4\n", 512) = 24
+read(3, "", 512)                        = 0

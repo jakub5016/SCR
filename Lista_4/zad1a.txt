@@ -1,0 +1,4 @@
+-f          Śledź procesy potomne, tworzone prze obecnie śledzone procesy,  jako  rezultat wywołania  systemowego  fork(2).  
+-e wyraż    Wyrażenie  kwalifikujące,  określające  które  zdarzenia  śledzić,  lub jak je
+                   śledzić.
+-p pid Podwieś  się  do  procesu  o podanym identyfikatorze ID pid i rozpocznij śledzenie.

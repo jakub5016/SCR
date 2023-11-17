@@ -1,0 +1,6 @@
+Należy uruchomić dwa terminale, jeden do uruchomienia programu jak np xclock oraz kolejny do odpalenia jednej z komend komend:
+    strace -c -p {PID} -o zad1h/strace_output.txt
+    ltrace -c -p {PID} -o ./zad1h/ltrace_output.txt
+
+
+W ten sposób funkcje biblioteczne/systemowe będą miały liczony czas działania w pliku o odpowiedniej nazwie.
