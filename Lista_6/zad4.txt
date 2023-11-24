@@ -1,0 +1,4 @@
+Program wykorzystuje kod z poprzednich zadań do stworzenia komunikatora. 
+Bazując na PID procesu po sklonowaniu proces, albo odczytuje zawartość tablicy babbles (czekając wczesniej na wysłanie komunikatu przez drugi proces), albo wpisuje wiadomość do tablicy sygnalizując to drugiemu procesowi zmienna babble_cond.
+Wykorzystując to że oba te procesy bedą dziedziczyć po jednym wspólnym terminalu oba mogą tak samo wypisywać jak i żądać informacji od użytkownika w tym samym czasie.
+Dodano funkcjonalności takie jak czyszczenie terminala po odświeżeniu aktualnych wiadomości oraz wyświetlaniu komunikatu pomagającego w obsłudze programu. Poprawiają one komfort użytkowania.
