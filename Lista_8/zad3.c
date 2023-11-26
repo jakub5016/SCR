@@ -10,6 +10,7 @@
 
 bool wioski[X][Y];
 pthread_mutex_t synowie_mutex;
+pthread_mutex_t wyslanie_sygnalu;
 pthread_cond_t synowie_cond; // Sygnalizator dla watkow
 bool rejent_czeka = false;
 char trafione_pozycje_syna[S][2]; // 2 poniewaz jest to X i Y
@@ -37,11 +38,10 @@ void * syn(void * numer_syna){
         }
     }
     pthread_mutex_lock(&synowie_mutex);
-    while (!rejent_czeka){ // Jesli rejent jeszcze nie zaczal czekac to trzeba na niego poczekac zeby wrocil do izby
-        sleep(1);
-    }
-   
+    
     pthread_cond_signal(&synowie_cond); //Zasygnalizuj dodanie nowego komunikatu 
+    
+    printf("Syn wyslal sygnal\n");
     for (int i=0; i< S; i++){
         for (int j=0; j< 2; j++){
             trafione_pozycje_syna[i][j] = trafione_pozycje[i][j]; // Ustawiamy wszystkie miejsca na wolne
@@ -57,10 +57,13 @@ void * rejent(){
     int ilosc_synow = 0;
     while (ilosc_synow <3)
     {
+        pthread_mutex_unlock(&wyslanie_sygnalu);
+
+        printf("Rejent czeka na kolejnego syna\n");
         rejent_czeka = true;
-        printf("Rejent zaczyna czekac\n");
         pthread_cond_wait(&synowie_cond, &synowie_mutex);
-        printf("Syn zakonczyl\n Trafione przez tego syna pozycje to:\n");
+        rejent_czeka = false;
+        printf("Trafione przez tego syna pozycje to:\n");
         for (int i=0; i< S; i++){
             for (int j=0; j< 2; j++){
                 if (j == 0){
