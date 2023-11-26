@@ -70,16 +70,23 @@ void * rejent(){
         licznik_sygnalow = 0;
         
         pthread_cond_wait(&synowie_cond, &synowie_mutex);
-        printf("Trafione przez tego syna pozycje to:\n");
+        printf("Synowi udało się zając\n");
         for (int i=0; i< S; i++){
-            for (int j=0; j< 2; j++){
-                if (j == 0){
-                    printf("X: %d  ", trafione_pozycje_syna[i][j]);
-                }
-                else{
-                    printf("Y: %d\n", trafione_pozycje_syna[i][j]);
-                }
+            int x = trafione_pozycje_syna[i][0];
+            int y = trafione_pozycje_syna[i][1];
+            if (wioski[x][y] == false){
+                wioski[x][y] = true;
+                printf("X: %d  Y: %d\n", x, y);
             }
+
+            // for (int j=0; j< 2; j++){
+            //     if (j == 0){
+            //         printf("X: %d  ", trafione_pozycje_syna[i][j]);
+            //     }
+            //     else{
+            //         printf("Y: %d\n", trafione_pozycje_syna[i][j]);
+            //     }
+            // }
         }    
         ilosc_synow ++;
     }
@@ -106,17 +113,41 @@ int main(int argc, char *argv[] ){
 
     pthread_t synowie_thread[N];
     pthread_t rejent_thread;
-    pthread_create(&rejent_thread, NULL, rejent, NULL);
+    
+    bool continiue = true;
+    while (continiue)
+    {   
+        system("clear");
+        continiue = false;
+        pthread_t synowie_thread[N];
+        pthread_t rejent_thread;
+        for (int i=0; i< X; i++){
+            for (int j=0; j< Y; j++){
+                if (wioski[i][j] == false){
+                    continiue = true;
+                    printf("[1] ");
+                }
+                else{
+                    printf("[0] ");
+                }
 
-    for (int j =0; j<N; j++){
-        pthread_create(&synowie_thread[j], NULL, syn, (void *) j);
+            }
+            printf("\n");
+        }
+        pthread_create(&rejent_thread, NULL, rejent, NULL);
+
+        for (int j =0; j<N; j++){
+            pthread_create(&synowie_thread[j], NULL, syn, (void *) j);
+        }
+
+        for (int j =0; j<N; j++){
+            pthread_join(synowie_thread[j], NULL);
+        }
+
+        pthread_join(rejent_thread, NULL);
     }
-
-    for (int j =0; j<N; j++){
-        pthread_join(synowie_thread[j], NULL);
-    }
-
-    pthread_join(rejent_thread, NULL);
+    
+    
 
     return 0;
 }
