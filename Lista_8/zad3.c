@@ -10,7 +10,6 @@
 
 bool wioski[X][Y];
 pthread_mutex_t synowie_mutex;
-pthread_mutex_t wyslanie_sygnalu;
 pthread_cond_t synowie_cond; // Sygnalizator dla watkow
 bool rejent_czeka = false;
 char trafione_pozycje_syna[S][2]; // 2 poniewaz jest to X i Y
@@ -59,7 +58,7 @@ void * syn(void * numer_syna){
 }
 void * rejent(){
     int ilosc_synow = 0;
-    pthread_mutex_lock(&wyslanie_sygnalu);
+    pthread_mutex_lock(&synowie_mutex);
 
     while (ilosc_synow <3)
     {
