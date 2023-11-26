@@ -28,9 +28,7 @@ void * syn(void * numer_syna){
         miejsce_X = numer_X * X;
 
         numer_Y = drand48();
-        miejsce_Y = numer_Y * Y;
-        printf("Syn %d, miejsce_X: %d, miejsce_Y: %d\n", numer_syna, miejsce_X, miejsce_Y);
-        
+        miejsce_Y = numer_Y * Y;        
         if (wioski[miejsce_X][miejsce_Y] == false){
             trafione_pozycje[i][0] = miejsce_X;
             trafione_pozycje[i][1] = miejsce_Y;
@@ -88,7 +86,6 @@ void * rejent(){
 
 
 int main(int argc, char *argv[] ){
-    pthread_mutex_init(&wyslanie_sygnalu, NULL);
     pthread_mutex_init(&synowie_mutex, NULL);
     pthread_cond_init(&synowie_cond, NULL);
     int PID = getpid();
@@ -112,7 +109,6 @@ int main(int argc, char *argv[] ){
         printf("Syn wrocil do domu\n");
     }
 
-    pthread_mutex_unlock(&wyslanie_sygnalu);
     pthread_join(rejent_thread, NULL);
 
     return 0;
