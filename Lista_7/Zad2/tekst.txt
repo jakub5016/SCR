@@ -1,0 +1,4 @@
+1. Aby przekazać jeden element należy zrzutować go do void natomiast aby przekazać wiele elementów należy przekazywać je jako wskaźnik
+do struktury również zrzutowany na void.
+2. Wszystkie wątki witają się tym samym id ponieważ podawany jest podawany wskaźnik do zmiennej. Należałoby albo podawać konkretną wartość
+do wątku.

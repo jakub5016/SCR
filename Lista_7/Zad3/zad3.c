@@ -24,8 +24,6 @@ int main(){
         // Jeżeli tak sprawdź warunki
         if (czy_pierwsza){
             printf("%d jest liczbą pierwsza.\n", aktualna_liczba);
-
-
             suma += aktualna_liczba;
             ilosc_znalezionych_liczb ++;
         }

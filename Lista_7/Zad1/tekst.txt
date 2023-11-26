@@ -1,0 +1,5 @@
+1. Wątki zaczynają się i kończą w sposób losowy. Prawdopodobnie zależy to od np zajęcia rdzenia w procesorze
+
+2. W zadnaiu bug5.c należy dodać na końcu programu pthread_join tak aby główny wątek czekał na resztę. Zrealizowano to w programie bug5_fixed.
+
+3. Bariera nie daje odpowiedniego efektu ponieważ bariera nie blokuje jednoczesnego uruchomienia kilku wątków.
