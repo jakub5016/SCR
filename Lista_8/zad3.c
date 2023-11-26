@@ -9,10 +9,12 @@
 #define S 5
 
 bool wioski[X][Y];
+int licznik_sygnalow =1;
+char trafione_pozycje_syna[S][2]; // 2 poniewaz jest to X i Y
+bool rejent_zajal_mutex = false;
+
 pthread_mutex_t synowie_mutex;
 pthread_cond_t synowie_cond; // Sygnalizator dla watkow
-bool rejent_czeka = false;
-char trafione_pozycje_syna[S][2]; // 2 poniewaz jest to X i Y
 
 void * syn(void * numer_syna){
     char trafione_pozycje[S][2];
@@ -34,16 +36,24 @@ void * syn(void * numer_syna){
             trafione_pozycje[i][1] = miejsce_Y;
         }
     }
-    pthread_mutex_lock(&synowie_mutex);
-    
-    while (!rejent_czeka)
+
+    while (!rejent_zajal_mutex)
     {
         sleep(1);
     }
     
+
+    pthread_mutex_lock(&synowie_mutex);
+    printf("Licznik sygnalow teraz jest rowny: %d \n", licznik_sygnalow);
+
+    while (licznik_sygnalow !=0)
+    {
+        sleep(1);
+    }
+    licznik_sygnalow++;
+
     pthread_cond_signal(&synowie_cond); //Zasygnalizuj dodanie nowego komunikatu 
     
-    printf("Syn wyslal sygnal\n");
     for (int i=0; i< S; i++){
         for (int j=0; j< 2; j++){
             trafione_pozycje_syna[i][j] = trafione_pozycje[i][j]; // Ustawiamy wszystkie miejsca na wolne
@@ -57,13 +67,13 @@ void * syn(void * numer_syna){
 void * rejent(){
     int ilosc_synow = 0;
     pthread_mutex_lock(&synowie_mutex);
-
+    rejent_zajal_mutex = true;
     while (ilosc_synow <3)
-    {
+    {   
         printf("Rejent czeka na kolejnego syna\n");
-        rejent_czeka = true;
+        licznik_sygnalow = 0;
+        
         pthread_cond_wait(&synowie_cond, &synowie_mutex);
-        rejent_czeka = false;
         printf("Trafione przez tego syna pozycje to:\n");
         for (int i=0; i< S; i++){
             for (int j=0; j< 2; j++){
@@ -88,6 +98,8 @@ void * rejent(){
 int main(int argc, char *argv[] ){
     pthread_mutex_init(&synowie_mutex, NULL);
     pthread_cond_init(&synowie_cond, NULL);
+
+
     int PID = getpid();
     seed48(&PID);
     for (int i=0; i< X; i++){
@@ -106,7 +118,6 @@ int main(int argc, char *argv[] ){
 
     for (int j =0; j<N; j++){
         pthread_join(synowie_thread[j], NULL);
-        printf("Syn wrocil do domu\n");
     }
 
     pthread_join(rejent_thread, NULL);
