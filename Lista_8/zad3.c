@@ -39,6 +39,11 @@ void * syn(void * numer_syna){
     }
     pthread_mutex_lock(&synowie_mutex);
     
+    while (!rejent_czeka)
+    {
+        sleep(1);
+    }
+    
     pthread_cond_signal(&synowie_cond); //Zasygnalizuj dodanie nowego komunikatu 
     
     printf("Syn wyslal sygnal\n");
@@ -53,12 +58,11 @@ void * syn(void * numer_syna){
     return NULL;
 }
 void * rejent(){
-    pthread_mutex_lock(&synowie_mutex);
     int ilosc_synow = 0;
+    pthread_mutex_lock(&wyslanie_sygnalu);
+
     while (ilosc_synow <3)
     {
-        pthread_mutex_unlock(&wyslanie_sygnalu);
-
         printf("Rejent czeka na kolejnego syna\n");
         rejent_czeka = true;
         pthread_cond_wait(&synowie_cond, &synowie_mutex);
@@ -85,6 +89,9 @@ void * rejent(){
 
 
 int main(int argc, char *argv[] ){
+    pthread_mutex_init(&wyslanie_sygnalu, NULL);
+    pthread_mutex_init(&synowie_mutex, NULL);
+    pthread_cond_init(&synowie_cond, NULL);
     int PID = getpid();
     seed48(&PID);
     for (int i=0; i< X; i++){
@@ -106,6 +113,7 @@ int main(int argc, char *argv[] ){
         printf("Syn wrocil do domu\n");
     }
 
+    pthread_mutex_unlock(&wyslanie_sygnalu);
     pthread_join(rejent_thread, NULL);
 
     return 0;
