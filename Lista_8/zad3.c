@@ -37,28 +37,24 @@ void * syn(void * numer_syna){
         }
     }
 
-    while (!rejent_zajal_mutex)
+    while (!rejent_zajal_mutex || licznik_sygnalow !=0)
     {
         sleep(1);
     }
     
 
     pthread_mutex_lock(&synowie_mutex);
-    printf("Licznik sygnalow teraz jest rowny: %d \n", licznik_sygnalow);
-
-    while (licznik_sygnalow !=0)
-    {
-        sleep(1);
-    }
     licznik_sygnalow++;
-
     pthread_cond_signal(&synowie_cond); //Zasygnalizuj dodanie nowego komunikatu 
-    
+        printf("Syn wyslsl sygnal\n");
+
     for (int i=0; i< S; i++){
         for (int j=0; j< 2; j++){
             trafione_pozycje_syna[i][j] = trafione_pozycje[i][j]; // Ustawiamy wszystkie miejsca na wolne
         }
     }
+
+    printf("Syn spierdala\n");
 
     pthread_mutex_unlock(&synowie_mutex);
 
