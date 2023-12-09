@@ -1,0 +1,12 @@
+condvar:
+
+W poprawy sposób realizuje czekanie przy pomocy zmiennej warunkowej pthread_cond
+
+bug1:
+
+Kiedy używamy kilka wątków czekających na zmienną warunkową powinniśmy użyć pthread_cond_brotcast zamiast singal
+tak aby każdy z wątkow otrzymał sygnał.
+
+bug4:
+
+pthread_mutex_lock(&count_mutex) powinno być poza pętlą tak aby wątek nie chciał drugi raz zająć tego samego mutexu 

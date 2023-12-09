@@ -3,9 +3,9 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <stdlib.h>
-#define X 10
-#define Y 10
-#define N 3
+#define X 5
+#define Y 5
+#define N 5
 #define S 5
 
 bool wioski[X][Y];
@@ -54,7 +54,7 @@ void * syn(void * numer_syna){
         }
     }
 
-    printf("Syn spierdala\n");
+    printf("Syn zakonczyl przepisywanie\n");
 
     pthread_mutex_unlock(&synowie_mutex);
 
@@ -64,7 +64,7 @@ void * rejent(){
     int ilosc_synow = 0;
     pthread_mutex_lock(&synowie_mutex);
     rejent_zajal_mutex = true;
-    while (ilosc_synow <3)
+    while (ilosc_synow <N)
     {   
         printf("Rejent czeka na kolejnego syna\n");
         licznik_sygnalow = 0;
@@ -79,14 +79,6 @@ void * rejent(){
                 printf("X: %d  Y: %d\n", x, y);
             }
 
-            // for (int j=0; j< 2; j++){
-            //     if (j == 0){
-            //         printf("X: %d  ", trafione_pozycje_syna[i][j]);
-            //     }
-            //     else{
-            //         printf("Y: %d\n", trafione_pozycje_syna[i][j]);
-            //     }
-            // }
         }    
         ilosc_synow ++;
     }

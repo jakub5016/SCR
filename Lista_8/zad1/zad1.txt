@@ -1,0 +1,13 @@
+Każdemu z wątków zostało przydzielone za mało stosu aby mogły wykonać operację pętli w linijkach:
+for (i=0; i<ARRAY_SIZE; i++)
+   {
+      A[i] = i * 1.0;
+   }
+
+Z tego powodu nie udało mu się wykonać przeznaczonych operacji. 
+W tym wypadku kożystamy z opcji zwiększenia stosu tworzonego wątku dzięki:
+
+stacksize = ARRAY_SIZE*sizeof(double) + MEGEXTRA;
+pthread_attr_setstacksize (&attr, stacksize);
+
+Dzięki temu przekazujemy do wątku stos o wielkości tabliczy z dodatkowym miejscem, buforem na obliczenia.
