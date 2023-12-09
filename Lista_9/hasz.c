@@ -1,7 +1,10 @@
 #include  	<openssl/evp.h>
 #include  	<string.h>
 #define BUFSIZE 128
-#define PASS_NUM 10 // Number of passwords to collect
+#define PASS_NUM 8 // Number of passwords to collect
+#define DIRSIZE 100 // How many lines to get form dir
+
+
 
 void bytes2md5(const char *data, int len, char *md5buf) {
 	EVP_MD_CTX *mdctx = EVP_MD_CTX_new();
@@ -22,7 +25,16 @@ void bytes2md5(const char *data, int len, char *md5buf) {
     // printf("%s ======================> %s\n", test, md5);
 }
 
-
+void show_passwords(char * passwords){
+    for (int i=0; i<PASS_NUM; i++){ \
+        printf("PASSWORD[%d] : ", i);
+       
+        for (int j = 0; j< 32; j++){
+            printf("%c",passwords[i+j]);
+        }
+        printf("\n");
+    }
+}
 
 int main(){
 
@@ -44,12 +56,30 @@ int main(){
         }
     }
     // Show passwords
-    for (int i=0; i<PASS_NUM; i++){ \
-        printf("PASSWORD[%d] : ", i);
-       
-        for (int j = 0; j< 32; j++){
-            printf("%c",passwords[i][j]);
+    show_passwords(passwords);
+
+
+    // Getting a word from dir and trying to break password
+    char word_got[BUFSIZE];
+    int j=0;
+    
+    for (int i=0; i<DIRSIZE; i++){
+        fgets(word_got, BUFSIZE, dir);
+        printf("Considering word:");
+
+        j=0;
+        for (; j<BUFSIZE; j++){ 
+            if (word_got[j] == '\n'){break;}
+        }
+        
+        char word[j];
+        j = 0;
+        for (; j<BUFSIZE; j++){ 
+            if (word_got[j] == '\n'){break;}
+            word[j] = word_got[j];
+            printf("%c", word[j]);
         }
         printf("\n");
     }
+
 }
