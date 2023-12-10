@@ -23,7 +23,7 @@ void bytes2md5(const char *data, int len, char *md5buf) {
 int check_pass(char * pass, char * correct_pass){
     char md5[33]; // 32 characters + null terminator
     bytes2md5(pass, strlen(pass), md5);
-    printf("%s ====================== %s\n", correct_pass, md5);
+    printf("%s =? %s\n", correct_pass, pass);
 
     return strcmp(pass, md5);
 }
