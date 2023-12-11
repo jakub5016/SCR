@@ -2,7 +2,6 @@
 #include  	<string.h>
 #define BUFSIZE 128
 #define PASS_NUM 5 // Number of passwords to collect
-#define DIRSIZE 14 // How many lines to get form dir
 
 
 
@@ -23,20 +22,9 @@ void bytes2md5(const char *data, int len, char *md5buf) {
 int check_pass(char * pass, char * correct_pass){
     char md5[33]; // 32 characters + null terminator
     bytes2md5(pass, strlen(pass), md5);
-    printf("%s =? %s\n", correct_pass, pass);
+    printf("%s =? %s = %s\n", correct_pass, pass, md5);
 
     return strcmp(pass, md5);
-}
-
-void show_passwords(char * passwords){
-    for (int i=0; i<PASS_NUM; i++){ \
-        printf("PASSWORD[%d] : ", i);
-       
-        for (int j = 0; j< 32; j++){
-            printf("%c",passwords[i+j]);
-        }
-        printf("\n");
-    }
 }
 
 int main(){
@@ -45,28 +33,29 @@ int main(){
     FILE* dir = fopen("dir.txt", "r");
 
     char buf[BUFSIZE];
-    char passwords[PASS_NUM][32];
+    char passwords[PASS_NUM][33];
 
     // Space = 32 in asci
     for (int i = 0; i < PASS_NUM; i++){
         fgets(buf, BUFSIZE, hasla);
         
         // GET PASSWORD HASHED
-        for (int j = 3; j<= 32 + 4; j++){  // 3 first letters are id then we have a password that is 32 letters
+        for (int j = 5; j<= 33 + 5; j++){  // 5 first letters are id then we have a password that is 32 letters
             if ((buf[j] != 9) && (buf[j] != 32)){    // Space = 32, TAB = 9
                 passwords[i][j-5] = buf[j];
             }
         }
-    }
-    // Show passwords
-    show_passwords(passwords);
+        passwords[i][32] = '\0';
+        printf("%c\n",passwords[i][32]);
 
+        printf("NEW PASSWORD: %s\n", passwords[i]);
+    }
 
     // Getting a word from dir and trying to break password
     char word_got[BUFSIZE];
     int j=0;
     
-    for (int i=0; i<DIRSIZE; i++){
+    for (int i=0; i<PASS_NUM; i++){
         fgets(word_got, BUFSIZE, dir);
         j=0;
         for (; j<BUFSIZE; j++){ 
@@ -80,8 +69,10 @@ int main(){
             word[j] = word_got[j];
         }
 
+        // printf("%ld\n" ,strlen(word));
+
         if (!check_pass(word, passwords[i])){
-            printf("HASLO nr. %d zostalo zlamane\n");
+            printf("HASLO nr. %d zostalo zlamane\n", i);
         }
     }
 
