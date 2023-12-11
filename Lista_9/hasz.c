@@ -22,9 +22,15 @@ void bytes2md5(const char *data, int len, char *md5buf) {
 int check_pass(char * pass, char * correct_pass){
     char md5[33]; // 32 characters + null terminator
     bytes2md5(pass, strlen(pass), md5);
-    printf("%s =? %s = %s\n", correct_pass, pass, md5);
+    int isTheSame = 1;
 
-    return strcmp(pass, md5);
+    for (int i= 0; i<33; i++){
+        if (correct_pass[i] != md5[i]){
+            isTheSame = 0;
+            break;
+        }
+    }
+    return isTheSame;
 }
 
 int main(){
@@ -46,13 +52,15 @@ int main(){
             }
         }
         passwords[i][32] = '\0';
-        printf("%c\n",passwords[i][32]);
-
-        printf("NEW PASSWORD: %s\n", passwords[i]);
     }
 
     // Getting a word from dir and trying to break password
     char word_got[BUFSIZE];
+
+    for (int i; i < BUFSIZE; i++){
+        word_got[i] = '\0';
+    }
+
     int j=0;
     
     for (int i=0; i<PASS_NUM; i++){
@@ -71,9 +79,12 @@ int main(){
 
         // printf("%ld\n" ,strlen(word));
 
-        if (!check_pass(word, passwords[i])){
-            printf("HASLO nr. %d zostalo zlamane\n", i);
+        for (int j = 0; j < PASS_NUM; j++){
+            if (check_pass(word, passwords[j])){
+                printf("HASLO nr. %d zostalo zlamane jest to %s\n", i, passwords[j]);
+            }
         }
+        
     }
 
 }
