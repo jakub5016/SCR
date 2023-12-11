@@ -2,7 +2,7 @@
 #include  	<string.h>
 #define BUFSIZE 128
 #define PASS_NUM 5 // Number of passwords to collect
-
+#define WORD_NUM 15
 
 
 void bytes2md5(const char *data, int len, char *md5buf) {
@@ -52,6 +52,8 @@ int main(){
             }
         }
         passwords[i][32] = '\0';
+
+        printf("NEW PASWORD: %s\n", passwords[i]);
     }
 
     // Getting a word from dir and trying to break password
@@ -63,7 +65,7 @@ int main(){
 
     int j=0;
     
-    for (int i=0; i<PASS_NUM; i++){
+    for (int i=0; i<WORD_NUM; i++){
         fgets(word_got, BUFSIZE, dir);
         j=0;
         for (; j<BUFSIZE; j++){ 
@@ -81,7 +83,11 @@ int main(){
 
         for (int j = 0; j < PASS_NUM; j++){
             if (check_pass(word, passwords[j])){
-                printf("HASLO nr. %d zostalo zlamane jest to %s\n", i, passwords[j]);
+                printf("HASLO nr. %d, w md5 jest to %s, zostalo zlamane jest to \"%s\" w md5 jest to ", j, passwords[j], word);
+                char md5[33]; // 32 characters + null terminator
+                bytes2md5(word, strlen(word), md5);
+                printf("%s\n", md5);
+
             }
         }
         
