@@ -36,6 +36,19 @@ int check_pass(char * pass, char * correct_pass){
     return isTheSame;
 }
 
+void check_all_dir_passwords(char * word){
+    for (int z =0; z < PASS_NUM; z++){
+            if (check_pass(word, PASSWORDS[z])){
+                printf("HASLO nr. %d, w md5 jest to %s, zostalo zlamane jest to \"%s\" w md5 jest to ", z, PASSWORDS[z], word);
+                char md5[33]; // 32 characters + null terminator
+                bytes2md5(word, strlen(word), md5);
+                printf("%s\n", md5);
+
+            }
+        }
+}
+
+// PREFIXES--------------------------------------------------------------------------------------------------------------------
 
 char *number_prefix_full(int front_number, int back_number, const char *str) {
     int front_length = (front_number >= 10) ? 2 : 1;
@@ -71,6 +84,29 @@ char *number_prefix_full(int front_number, int back_number, const char *str) {
 
     return result;
 }
+char *number_prefix_front(int front_number, const char *str) {
+    int front_length = (front_number >= 10) ? 2 : 1;
+    char *front_string = (char *)malloc(front_length + 1);
+    snprintf(front_string, front_length + 1, "%d", front_number);
+
+    int string_length = strlen(str);
+
+    int result_length = string_length + front_length;
+    char *result = (char *)malloc(result_length + 1);
+
+    for (int i = 0; i < front_length; i++) {
+        result[i] = front_string[i];
+    }
+
+    for (int i = 0; i < string_length; i++) {
+        result[i + front_length] = str[i];
+    }
+
+    result[result_length] = '\0';
+
+    free(front_string);
+    return result;
+}
 
 void get_passwords(char * nameOfTheFile){ //
     FILE* hasla = fopen(nameOfTheFile, "r");
@@ -91,18 +127,6 @@ void get_passwords(char * nameOfTheFile){ //
     }
 
     fclose(hasla);
-}
-
-void check_all_dir_passwords(char * word){
-    for (int z =0; z < PASS_NUM; z++){
-            if (check_pass(word, PASSWORDS[z])){
-                printf("HASLO nr. %d, w md5 jest to %s, zostalo zlamane jest to \"%s\" w md5 jest to ", z, PASSWORDS[z], word);
-                char md5[33]; // 32 characters + null terminator
-                bytes2md5(word, strlen(word), md5);
-                printf("%s\n", md5);
-
-            }
-        }
 }
 
 void basic_break(int number_prefix_enable){
@@ -133,11 +157,19 @@ void basic_break(int number_prefix_enable){
         word[j] = '\0';
 
         if (number_prefix_enable > 0){ //Number prefix gives us info about how mutch numbers we can get at the beginning and end
+
+            // FULL NUMBER PREFIX 
             for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){
                 for ( int number_j = 0; number_j <  pow(10, number_prefix_enable); number_j++){
                     char * word_after_full_prefix = number_prefix_full(number_i, number_j, word);
                     check_all_dir_passwords(word_after_full_prefix);   
                 }
+            }
+
+            // FRONT NUMBER PREFIX
+            for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){
+                char * word_after_front_prefix = number_prefix_front(number_i, word);
+                check_all_dir_passwords(word_after_front_prefix);   
             }
         } 
         
