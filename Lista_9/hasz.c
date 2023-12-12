@@ -2,8 +2,8 @@
 #include  	<string.h>
 #include <math.h> // -lm flag
 #define BUFSIZE 128
-#define PASS_NUM 5 // Number of passwords to collect
-#define WORD_NUM 15
+#define PASS_NUM 11 // Number of passwords to collect
+#define WORD_NUM 14
 
 char PASSWORDS[PASS_NUM][33];
 
@@ -37,17 +37,15 @@ int check_pass(char * pass, char * correct_pass){
 }
 
 
-char *number_prefix(int front_number, int back_number, const char *str) {
+char *number_prefix_full(int front_number, int back_number, const char *str) {
     int front_length = (front_number >= 10) ? 2 : 1;
     int back_length = (back_number >= 10) ? 2 : 1;
 
     char *front_string = (char *)malloc(front_length + 1);
     snprintf(front_string, front_length + 1, "%d", front_number);
-    printf("front string: %s\n", front_string);
 
     char *back_string = (char *)malloc(back_length + 1);
     snprintf(back_string, back_length + 1, "%d", back_number);
-    printf("back string: %s\n", back_string);
 
     int string_length = strlen(str);
 
@@ -135,20 +133,22 @@ void basic_break(int number_prefix_enable){
         word[j] = '\0';
 
         if (number_prefix_enable > 0){ //Number prefix gives us info about how mutch numbers we can get at the beginning and end
-            for ( int number = 0; number <  pow(10, number_prefix_enable); number++){
-                char * word_after_prefix = number_prefix(number, pow(10, number_prefix_enable) - number, word);\
-                check_all_dir_passwords(word_after_prefix);   
-
+            for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){
+                for ( int number_j = 0; number_j <  pow(10, number_prefix_enable); number_j++){
+                    char * word_after_full_prefix = number_prefix_full(number_i, number_j, word);
+                    check_all_dir_passwords(word_after_full_prefix);   
+                }
             }
         } 
-        else{check_all_dir_passwords(word);}
+        
+        check_all_dir_passwords(word);
     }
     fclose(dir);
 }
 
 int main(){
     get_passwords("hasla.txt");
-    basic_break(0);
+    basic_break(2);
 
 
     // char * slowo = "Slowo";
