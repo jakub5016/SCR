@@ -56,13 +56,8 @@ void get_passwords(char * nameOfTheFile){ //
     fclose(hasla);
 }
 
-int main(){
-
+void basic_break(){
     FILE* dir = fopen("dir.txt", "r");
-    
-    get_passwords("hasla.txt");
-
-    // Getting a word from dir and trying to break password
     char word_got[BUFSIZE];
 
     for (int i; i < BUFSIZE; i++){
@@ -100,5 +95,13 @@ int main(){
         }
         
     }
+    fclose(dir);
+}
+
+
+int main(){
+    get_passwords("hasla.txt");
+
+    basic_break();
 
 }
