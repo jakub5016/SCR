@@ -1,5 +1,6 @@
-#include  	<openssl/evp.h>
+#include  	<openssl/evp.h> //-lssl -lcrypto -pthread
 #include  	<string.h>
+#include <math.h> // -lm flag
 #define BUFSIZE 128
 #define PASS_NUM 5 // Number of passwords to collect
 #define WORD_NUM 15
@@ -95,9 +96,9 @@ void get_passwords(char * nameOfTheFile){ //
 }
 
 void check_all_dir_passwords(char * word){
-    for (int j =0; j < PASS_NUM; j++){
-            if (check_pass(word, PASSWORDS[j])){
-                printf("HASLO nr. %d, w md5 jest to %s, zostalo zlamane jest to \"%s\" w md5 jest to ", j, PASSWORDS[j], word);
+    for (int z =0; z < PASS_NUM; z++){
+            if (check_pass(word, PASSWORDS[z])){
+                printf("HASLO nr. %d, w md5 jest to %s, zostalo zlamane jest to \"%s\" w md5 jest to ", z, PASSWORDS[z], word);
                 char md5[33]; // 32 characters + null terminator
                 bytes2md5(word, strlen(word), md5);
                 printf("%s\n", md5);
@@ -106,16 +107,17 @@ void check_all_dir_passwords(char * word){
         }
 }
 
-void basic_break(){
+void basic_break(int number_prefix_enable){
     FILE* dir = fopen("dir.txt", "r");
     char word_got[BUFSIZE];
 
-    for (int i; i < BUFSIZE; i++){
-        word_got[i] = '\0';
-    }
+    // IDK if this is necessery but it gives seq fault
+    // for (int i; i < BUFSIZE; i++){
+    //     word_got[i] = '\0';
+    // }
 
     int j=0;
-    
+
     for (int i=0; i<WORD_NUM; i++){
         fgets(word_got, BUFSIZE, dir);
         j=0;
@@ -132,14 +134,21 @@ void basic_break(){
 
         word[j] = '\0';
 
-        check_all_dir_passwords(word);   
+        if (number_prefix_enable > 0){ //Number prefix gives us info about how mutch numbers we can get at the beginning and end
+            for ( int number = 0; number <  pow(10, number_prefix_enable); number++){
+                char * word_after_prefix = number_prefix(number, pow(10, number_prefix_enable) - number, word);\
+                check_all_dir_passwords(word_after_prefix);   
+
+            }
+        } 
+        else{check_all_dir_passwords(word);}
     }
     fclose(dir);
 }
 
 int main(){
     get_passwords("hasla.txt");
-    basic_break();
+    basic_break(0);
 
 
     // char * slowo = "Slowo";
