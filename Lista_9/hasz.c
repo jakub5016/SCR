@@ -121,8 +121,8 @@ void basic_break(){
         word[j] = '\0';
 
         // printf("%s\n" ,word);
-
-        for (int j = 0; j < PASS_NUM; j++){
+        j = 0;
+        for (; j < PASS_NUM; j++){
             if (check_pass(word, PASSWORDS[j])){
                 printf("HASLO nr. %d, w md5 jest to %s, zostalo zlamane jest to \"%s\" w md5 jest to ", j, PASSWORDS[j], word);
                 char md5[33]; // 32 characters + null terminator
@@ -133,13 +133,13 @@ void basic_break(){
         }
         
     }
-    fclose(dir);
+    // fclose(dir);
 }
 
 
 int main(){
     get_passwords("hasla.txt");
-    // basic_break();
+    basic_break();
     char * slowo = "Slowo";
 
     printf("%s\n", slowo);
