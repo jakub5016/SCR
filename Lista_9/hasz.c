@@ -70,16 +70,19 @@ int main(){
         j=0;
         for (; j<BUFSIZE; j++){ 
             if (word_got[j] == '\n'){break;}
+            // printf("%c\n",word_got[j]);
         }
-        
+
         char word[j];
         j = 0;
         for (; j<BUFSIZE; j++){ 
-            if (word_got[j] == '\n'){break;}
+            if ((word_got[j] == '\n')||(word_got[j] == '\0')){break;}
             word[j] = word_got[j];
         }
 
-        // printf("%ld\n" ,strlen(word));
+        word[j] = '\0';
+
+        // printf("%s\n" ,word);
 
         for (int j = 0; j < PASS_NUM; j++){
             if (check_pass(word, passwords[j])){
