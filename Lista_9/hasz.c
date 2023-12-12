@@ -84,6 +84,7 @@ char *number_prefix_full(int front_number, int back_number, const char *str) {
 
     return result;
 }
+
 char *number_prefix_front(int front_number, const char *str) {
     int front_length = (front_number >= 10) ? 2 : 1;
     char *front_string = (char *)malloc(front_length + 1);
@@ -107,6 +108,34 @@ char *number_prefix_front(int front_number, const char *str) {
     free(front_string);
     return result;
 }
+
+char *number_prefix_back(int back_number, const char *str) {
+    int back_length = (back_number >= 10) ? 2 : 1;
+
+    char *back_string = (char *)malloc(back_length + 1);
+    snprintf(back_string, back_length + 1, "%d", back_number);
+
+    int string_length = strlen(str);
+
+    int result_length = string_length + back_length;
+    char *result = (char *)malloc(result_length + 1);
+
+    for (int i = 0; i < string_length; i++) {
+        result[i] = str[i];
+    }
+
+    for (int i = 0; i < back_length; i++) {
+        result[i + string_length] = back_string[i];
+    }
+
+    result[result_length] = '\0';
+
+    free(back_string);
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------------------------
 
 void get_passwords(char * nameOfTheFile){ //
     FILE* hasla = fopen(nameOfTheFile, "r");
@@ -170,6 +199,11 @@ void basic_break(int number_prefix_enable){
             for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){
                 char * word_after_front_prefix = number_prefix_front(number_i, word);
                 check_all_dir_passwords(word_after_front_prefix);   
+            }
+
+            for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){
+                char * word_after_back_prefix = number_prefix_back(number_i, word);
+                check_all_dir_passwords(word_after_back_prefix);   
             }
         } 
         
