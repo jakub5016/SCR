@@ -35,6 +35,44 @@ int check_pass(char * pass, char * correct_pass){
     return isTheSame;
 }
 
+
+char *number_prefix(int front_number, int back_number, const char *str) {
+    int front_length = (front_number >= 10) ? 2 : 1;
+    int back_length = (back_number >= 10) ? 2 : 1;
+
+    char *front_string = (char *)malloc(front_length + 1);
+    snprintf(front_string, front_length + 1, "%d", front_number);
+    printf("front string: %s\n", front_string);
+
+    char *back_string = (char *)malloc(back_length + 1);
+    snprintf(back_string, back_length + 1, "%d", back_number);
+    printf("back string: %s\n", back_string);
+
+    int string_length = strlen(str);
+
+    int result_length = string_length + front_length + back_length;
+    char *result = (char *)malloc(result_length + 1);
+
+    for (int i = 0; i < front_length; i++) {
+        result[i] = front_string[i];
+    }
+
+    for (int i = 0; i < string_length; i++) {
+        result[i + front_length] = str[i];
+    }
+
+    for (int i = 0; i < back_length; i++) {
+        result[i + front_length + string_length] = back_string[i];
+    }
+
+    result[result_length] = '\0';
+
+    free(front_string);
+    free(back_string);
+
+    return result;
+}
+
 void get_passwords(char * nameOfTheFile){ //
     FILE* hasla = fopen(nameOfTheFile, "r");
     char buf[BUFSIZE];
@@ -101,7 +139,12 @@ void basic_break(){
 
 int main(){
     get_passwords("hasla.txt");
+    // basic_break();
+    char * slowo = "Slowo";
 
-    basic_break();
+    printf("%s\n", slowo);
 
+    char * zmodyfikowane_slowo = number_prefix(2, 2, slowo);
+
+    printf("%s\n", zmodyfikowane_slowo);
 }
