@@ -4,7 +4,7 @@
 #include <ctype.h> 
 
 #define BUFSIZE 128
-#define PASS_NUM 21 // Number of passwords to collect
+#define PASS_NUM 28 // Number of passwords to collect
 
 int WORD_NUM = 0;
 char PASSWORDS[PASS_NUM][33];
@@ -165,6 +165,26 @@ char *cap_prefix_first(const char *str){
 
     return result;
 }
+// ADDDING TWO WORDS------------------------------------------------------------------------------------------------------
+
+char * add_words(const char *str1, const char *str2){
+    char *result = (char *)malloc(strlen(str1) + strlen(str2) + 2); // \0 sign and ' '
+    for (int i = 0; i < strlen(str1); i++){
+        result[i] = str1[i];
+    }
+
+    result[strlen(str1)] = ' ';
+    
+    for (int i = 0; i < strlen(str2); i++){
+        result[strlen(str1) + 1 + i] = str2[i];
+    }
+
+    result[strlen(str1) + strlen(str2)+1] = '\0';
+
+    return result;
+}
+
+// GETERS------------------------------------------------------------------------------------------------------
 
 int get_number_of_lines(char * filename){
     FILE *fp = fopen(filename, "r");
@@ -291,16 +311,75 @@ void * basic_break(void * prefix_enable_arg){
     return NULL;
 }
 
+
+void * two_word_break(){
+    FILE* dir_1 = fopen("dir.txt", "r");
+    FILE* dir_2;
+
+    for (int i = 0; i < WORD_NUM; i++) { // Dir 1 loop
+        char word_got[BUFSIZE];
+        fgets(word_got, BUFSIZE, dir_1);
+        int l = 0;
+        for (; l < BUFSIZE; l++) {
+            if (word_got[l] == '\n') {
+                break;
+            }
+        }
+
+        char word_1[l];
+        l = 0;
+        for (; l < BUFSIZE; l++) {
+            if ((word_got[l] == '\n') || (word_got[l] == '\0')) {
+                break;
+            }
+            word_1[l] = word_got[l];
+        }
+
+        word_1[l] = '\0';
+
+        dir_2 = fopen("dir.txt", "r");
+        for (int j = 0; j < WORD_NUM; j++) { // Dir 2 loop
+
+            fgets(word_got, BUFSIZE, dir_2);
+            int k = 0;
+            for (; k < BUFSIZE; k++) {
+                if (word_got[k] == '\n') {
+                    break;
+                }
+            }
+
+            char word_2[k];
+            k = 0;
+            for (; k < BUFSIZE; k++) {
+                if ((word_got[k] == '\n') || (word_got[k] == '\0')) {
+                    break;
+                }
+                word_2[k] = word_got[k];
+            }
+
+            word_2[k] = '\0';
+
+            // Add words
+            check_all_dir_passwords(add_words(word_1, word_2));
+        }
+        fclose(dir_2);
+    }
+    fclose(dir_1);
+
+    return NULL;
+}
+
 int main(){
     get_passwords("hasla.txt");
     WORD_NUM = get_number_of_lines("dir.txt") +1;
-    pthread_t lamacze[5];
+    pthread_t lamacze[6];
 
     pthread_create(&lamacze[0], NULL, basic_break, (void *) 'a');
     pthread_create(&lamacze[1], NULL, basic_break, (void *) 'b');
     pthread_create(&lamacze[2], NULL, basic_break, (void *) 'c');
     pthread_create(&lamacze[3], NULL, basic_break, (void *) 'd');
     pthread_create(&lamacze[4], NULL, basic_break, (void *) 'f');
+    pthread_create(&lamacze[5], NULL, two_word_break, NULL);
 
     pthread_join(lamacze[0], NULL);
     printf("Przyszedl\n");
@@ -312,12 +391,8 @@ int main(){
     printf("Przyszedl\n");
     pthread_join(lamacze[4], NULL);
     printf("Przyszedl\n");
+    pthread_join(lamacze[5], NULL);
+    printf("Przyszedl\n");
 
-    // char * slowo = "Slowo";
 
-    // printf("%s\n", slowo);
-
-    // char * zmodyfikowane_slowo = number_prefix(2, 2, slowo);
-
-    // printf("%s\n", zmodyfikowane_slowo);
 }
