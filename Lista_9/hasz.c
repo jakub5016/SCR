@@ -204,18 +204,15 @@ void get_passwords(char * nameOfTheFile){ //
     }
 
     fclose(hasla);
+
 }
 
-void basic_break(int number_prefix_enable){
+void * basic_break(void * prefix_enable_arg){
     FILE* dir = fopen("dir.txt", "r");
     char word_got[BUFSIZE];
 
-    // IDK if this is necessery but it gives seq fault
-    // for (int i; i < BUFSIZE; i++){
-    //     word_got[i] = '\0';
-    // }
-
     int j=0;
+    int prefix_enable = prefix_enable_arg;
 
     for (int i=0; i<WORD_NUM; i++){
         fgets(word_got, BUFSIZE, dir);
@@ -233,67 +230,88 @@ void basic_break(int number_prefix_enable){
 
         word[j] = '\0';
 
-        if (number_prefix_enable > 0){ //Number prefix gives us info about how mutch numbers we can get at the beginning and end
+        if (prefix_enable > 0){ //Number prefix gives us info about how mutch numbers we can get at the beginning and end
 
             // FULL NUMBER PREFIX 
-            for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){
-                for ( int number_j = 0; number_j <  pow(10, number_prefix_enable); number_j++){
+            for ( int number_i = 0; number_i <  100; number_i++){
+                for ( int number_j = 0; number_j <  100; number_j++){
                     
                     char * word_after_full_prefix = number_prefix_full(number_i, number_j, word);
                     check_all_dir_passwords(word_after_full_prefix);   
-                    char * word_after_cap_full = cap_prefix_full(word);
-                    char * word_after_cap_first = cap_prefix_first(word);
+                    if (prefix_enable > 1){
+                        char * word_after_cap_full = cap_prefix_full(word);
+                        char * word_after_cap_first = cap_prefix_first(word);
 
-                    char * word_after_front_prefix_cap_first = number_prefix_full(number_i ,number_j, word_after_cap_first);
-                    check_all_dir_passwords(word_after_front_prefix_cap_first);   
-                    char * word_after_front_prefix_cap_full = number_prefix_full(number_i,number_j ,word_after_cap_full);
-                    check_all_dir_passwords(word_after_front_prefix_cap_full);   
-
+                        char * word_after_front_prefix_cap_first = number_prefix_full(number_i ,number_j, word_after_cap_first);
+                        check_all_dir_passwords(word_after_front_prefix_cap_first);   
+                        char * word_after_front_prefix_cap_full = number_prefix_full(number_i,number_j ,word_after_cap_full);
+                        check_all_dir_passwords(word_after_front_prefix_cap_full);   
+                    }
                 }
             }
 
             // FRONT NUMBER PREFIX
-            for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){    
+            for ( int number_i = 0; number_i <  100; number_i++){    
                 // Basic ver            
                 char * word_after_front_prefix = number_prefix_front(number_i, word);
                 check_all_dir_passwords(word_after_front_prefix);   
                 
                 //Adding caps
-                char * word_after_cap_full = cap_prefix_full(word);
-                char * word_after_cap_first = cap_prefix_first(word);
+                if (prefix_enable > 1){
+                    char * word_after_cap_full = cap_prefix_full(word);
+                    char * word_after_cap_first = cap_prefix_first(word);
 
-                char * word_after_front_prefix_cap_first = number_prefix_front(number_i, word_after_cap_first);
-                check_all_dir_passwords(word_after_front_prefix_cap_first);   
-                char * word_after_front_prefix_cap_full = number_prefix_front(number_i, word_after_cap_full);
-                check_all_dir_passwords(word_after_front_prefix_cap_full);   
-
+                    char * word_after_front_prefix_cap_first = number_prefix_front(number_i, word_after_cap_first);
+                    check_all_dir_passwords(word_after_front_prefix_cap_first);   
+                    char * word_after_front_prefix_cap_full = number_prefix_front(number_i, word_after_cap_full);
+                    check_all_dir_passwords(word_after_front_prefix_cap_full);   
+                }
             }
             // BACK NUMBER PREFIX
-            for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){
+            for ( int number_i = 0; number_i <  100; number_i++){
                 char * word_after_back_prefix = number_prefix_back(number_i, word);
                 check_all_dir_passwords(word_after_back_prefix);   
+                if (prefix_enable > 1){
+                    char * word_after_cap_full = cap_prefix_full(word);
+                    char * word_after_cap_first = cap_prefix_first(word);
 
-                char * word_after_cap_full = cap_prefix_full(word);
-                char * word_after_cap_first = cap_prefix_first(word);
-
-                char * word_after_back_prefix_cap_first = number_prefix_back(number_i, word_after_cap_first);
-                check_all_dir_passwords(word_after_back_prefix_cap_first);   
-                char * word_after_back_prefix_cap_full = number_prefix_back(number_i, word_after_cap_full);
-                check_all_dir_passwords(word_after_back_prefix_cap_full);   
+                    char * word_after_back_prefix_cap_first = number_prefix_back(number_i, word_after_cap_first);
+                    check_all_dir_passwords(word_after_back_prefix_cap_first);   
+                    char * word_after_back_prefix_cap_full = number_prefix_back(number_i, word_after_cap_full);
+                    check_all_dir_passwords(word_after_back_prefix_cap_full);   
+                }
             }
         } 
-
-        check_all_dir_passwords(cap_prefix_full(word));
-        check_all_dir_passwords(cap_prefix_first(word));
-        check_all_dir_passwords(word);
+        else{
+            if (prefix_enable > -1){
+                check_all_dir_passwords(cap_prefix_full(word));
+                check_all_dir_passwords(cap_prefix_first(word));
+            }
+            check_all_dir_passwords(word);
+        }
     }
     fclose(dir);
+
+    return NULL;
+
 }
 
 int main(){
     get_passwords("hasla.txt");
     WORD_NUM = get_number_of_lines("dir.txt") +1;
-    basic_break(2);
+    basic_break((void *)2);
+    // pthread_t lamacze[3];
+
+    // pthread_create(&lamacze[0], NULL, basic_break, (void *) 0);
+    // pthread_create(&lamacze[1], NULL, basic_break, (void *) 1);
+    // pthread_create(&lamacze[2], NULL, basic_break, (void *) 2);
+
+    // pthread_join(&lamacze[0], NULL);
+    // printf("Przyszedl\n");
+    // pthread_join(&lamacze[1], NULL);
+    // printf("Przyszedl\n");
+    // pthread_join(&lamacze[2], NULL);
+    // printf("Przyszedl\n");
 
 
     // char * slowo = "Slowo";
