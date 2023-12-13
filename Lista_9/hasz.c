@@ -1,10 +1,12 @@
 #include  	<openssl/evp.h> //-lssl -lcrypto -pthread
 #include  	<string.h>
 #include <math.h> // -lm flag
-#define BUFSIZE 128
-#define PASS_NUM 11 // Number of passwords to collect
-#define WORD_NUM 14
+#include <ctype.h> 
 
+#define BUFSIZE 128
+#define PASS_NUM 21 // Number of passwords to collect
+
+int WORD_NUM = 0;
 char PASSWORDS[PASS_NUM][33];
 
 
@@ -48,7 +50,7 @@ void check_all_dir_passwords(char * word){
         }
 }
 
-// PREFIXES--------------------------------------------------------------------------------------------------------------------
+// NUMBER PREFIXES----------------------------------------------------------------------------------------------------------------
 
 char *number_prefix_full(int front_number, int back_number, const char *str) {
     int front_length = (front_number >= 10) ? 2 : 1;
@@ -135,7 +137,53 @@ char *number_prefix_back(int back_number, const char *str) {
     return result;
 }
 
-//--------------------------------------------------------------------------------------------------------------------
+// CAPITALIZATION PREFIXES------------------------------------------------------------------------------------------------------
+
+char *cap_prefix_full(const char *str){
+    char *result = (char *)malloc(strlen(str) + 1);
+
+    for (int i = 0; i < strlen(str); i++){
+        result[i] = toupper(str[i]);
+    }
+
+    result[strlen(str)] = '\0';
+
+    return result;
+
+
+}
+
+char *cap_prefix_first(const char *str){
+    char *result = (char *)malloc(strlen(str) + 1);
+
+    for (int i = 0; i < strlen(str); i++){
+        if (i == 0){result[i] = toupper(str[i]);}
+        else{result[i] = str[i];}
+    }
+
+    result[strlen(str)] = '\0';
+
+    return result;
+}
+
+int get_number_of_lines(char * filename){
+    FILE *fp = fopen(filename, "r");
+    char c;
+    int count = 0;
+    if (fp == NULL)
+    {
+        printf("Could not open file %s", filename);
+        return 0;
+    }
+ 
+    for (c = getc(fp); c != EOF; c = getc(fp))
+        if (c == '\n') 
+            count = count + 1;
+
+    fclose(fp);
+
+    return count;
+}
 
 void get_passwords(char * nameOfTheFile){ //
     FILE* hasla = fopen(nameOfTheFile, "r");
@@ -190,23 +238,53 @@ void basic_break(int number_prefix_enable){
             // FULL NUMBER PREFIX 
             for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){
                 for ( int number_j = 0; number_j <  pow(10, number_prefix_enable); number_j++){
+                    
                     char * word_after_full_prefix = number_prefix_full(number_i, number_j, word);
                     check_all_dir_passwords(word_after_full_prefix);   
+                    char * word_after_cap_full = cap_prefix_full(word);
+                    char * word_after_cap_first = cap_prefix_first(word);
+
+                    char * word_after_front_prefix_cap_first = number_prefix_full(number_i ,number_j, word_after_cap_first);
+                    check_all_dir_passwords(word_after_front_prefix_cap_first);   
+                    char * word_after_front_prefix_cap_full = number_prefix_full(number_i,number_j ,word_after_cap_full);
+                    check_all_dir_passwords(word_after_front_prefix_cap_full);   
+
                 }
             }
 
             // FRONT NUMBER PREFIX
-            for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){
+            for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){    
+                // Basic ver            
                 char * word_after_front_prefix = number_prefix_front(number_i, word);
                 check_all_dir_passwords(word_after_front_prefix);   
-            }
+                
+                //Adding caps
+                char * word_after_cap_full = cap_prefix_full(word);
+                char * word_after_cap_first = cap_prefix_first(word);
 
+                char * word_after_front_prefix_cap_first = number_prefix_front(number_i, word_after_cap_first);
+                check_all_dir_passwords(word_after_front_prefix_cap_first);   
+                char * word_after_front_prefix_cap_full = number_prefix_front(number_i, word_after_cap_full);
+                check_all_dir_passwords(word_after_front_prefix_cap_full);   
+
+            }
+            // BACK NUMBER PREFIX
             for ( int number_i = 0; number_i <  pow(10, number_prefix_enable); number_i++){
                 char * word_after_back_prefix = number_prefix_back(number_i, word);
                 check_all_dir_passwords(word_after_back_prefix);   
+
+                char * word_after_cap_full = cap_prefix_full(word);
+                char * word_after_cap_first = cap_prefix_first(word);
+
+                char * word_after_back_prefix_cap_first = number_prefix_back(number_i, word_after_cap_first);
+                check_all_dir_passwords(word_after_back_prefix_cap_first);   
+                char * word_after_back_prefix_cap_full = number_prefix_back(number_i, word_after_cap_full);
+                check_all_dir_passwords(word_after_back_prefix_cap_full);   
             }
         } 
-        
+
+        check_all_dir_passwords(cap_prefix_full(word));
+        check_all_dir_passwords(cap_prefix_first(word));
         check_all_dir_passwords(word);
     }
     fclose(dir);
@@ -214,6 +292,7 @@ void basic_break(int number_prefix_enable){
 
 int main(){
     get_passwords("hasla.txt");
+    WORD_NUM = get_number_of_lines("dir.txt") +1;
     basic_break(2);
 
 
