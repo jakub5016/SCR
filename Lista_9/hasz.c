@@ -4,11 +4,15 @@
 #include <ctype.h> 
 
 #define BUFSIZE 128
-#define PASS_NUM 28 // Number of passwords to collect
+#define PASS_NUM 182 // Number of passwords to collect
 
 int WORD_NUM = 0;
 char PASSWORDS[PASS_NUM][33];
+char IS_PASSWORD_GUESSED[PASS_NUM];
+int PASSWORD_GUESSED;
 
+pthread_mutex_t mutex;
+pthread_cond_t cond;
 
 void bytes2md5(const char *data, int len, char *md5buf) {
 	EVP_MD_CTX *mdctx = EVP_MD_CTX_new();
@@ -40,14 +44,16 @@ int check_pass(char * pass, char * correct_pass){
 
 void check_all_dir_passwords(char * word){
     for (int z =0; z < PASS_NUM; z++){
+        if(IS_PASSWORD_GUESSED[z] == 0 ){
             if (check_pass(word, PASSWORDS[z])){
                 printf("HASLO nr. %d, w md5 jest to %s, zostalo zlamane jest to \"%s\" w md5 jest to ", z, PASSWORDS[z], word);
+                IS_PASSWORD_GUESSED[z] = 1;
                 char md5[33]; // 32 characters + null terminator
                 bytes2md5(word, strlen(word), md5);
                 printf("%s\n", md5);
-
             }
         }
+    }
 }
 
 // NUMBER PREFIXES----------------------------------------------------------------------------------------------------------------
@@ -227,6 +233,8 @@ void get_passwords(char * nameOfTheFile){ //
 
 }
 
+
+// PTHREAD FUNCTIONS------------------------------------------------------------------------------------------------------
 void * basic_break(void * prefix_enable_arg){
     FILE* dir = fopen("dir.txt", "r");
     char word_got[BUFSIZE];
@@ -254,7 +262,7 @@ void * basic_break(void * prefix_enable_arg){
         // DEPEND ON PREFIX ENABLE SWITCH MODE
         switch (prefix_enable){
         
-        case 'a':{
+        case 'a':{ // FULL PREFIX
             for ( int number_i = 0; number_i <  100; number_i++){
                 for ( int number_j = 0; number_j <  100; number_j++){
                     check_all_dir_passwords(number_prefix_full(number_i, number_j, word));
@@ -263,38 +271,71 @@ void * basic_break(void * prefix_enable_arg){
             break;
         }
         
-        case 'b':{
+        case 'b':{ // FULL PREFIX FIRST LETTER
             for ( int number_i = 0; number_i <  100; number_i++){
                 for ( int number_j = 0; number_j <  100; number_j++){
                     char * word_after_front_prefix_cap_first = number_prefix_full(number_i ,number_j, cap_prefix_first(word));
-                    check_all_dir_passwords(word_after_front_prefix_cap_first);   
-                    char * word_after_front_prefix_cap_full = number_prefix_full(number_i,number_j , cap_prefix_full(word));
-                    check_all_dir_passwords(word_after_front_prefix_cap_full);   
+                    check_all_dir_passwords(word_after_front_prefix_cap_first);    
                     
                 }
             }
             break;
         }
 
-        case 'c':{
+        case 'c':{ // FULL PREFIX ALL BIG
+            for ( int number_i = 0; number_i <  100; number_i++){
+                for ( int number_j = 0; number_j <  100; number_j++){  
+                    char * word_after_front_prefix_cap_full = number_prefix_full(number_i,number_j , cap_prefix_full(word));
+                    check_all_dir_passwords(word_after_front_prefix_cap_full);   
+                }
+            }
+            break;
+        }
+
+        case 'd':{ // FRONT PREFIX
             for ( int number_i = 0; number_i <  100; number_i++){    
-                check_all_dir_passwords(number_prefix_front(number_i, word));   
+                check_all_dir_passwords(number_prefix_front(number_i, word));      
+            }
+            break;
+        }
+
+        case 'e':{ // FRONT PREFIX FIRST LETTER
+            for ( int number_i = 0; number_i <  100; number_i++){    
                 char * word_after_front_prefix_cap_first = number_prefix_front(number_i, cap_prefix_first(word));
                 check_all_dir_passwords(word_after_front_prefix_cap_first);   
+            }
+            break;
+        }
+
+        case 'f':{ // FRONT PREFIX ALL BIG
+            for ( int number_i = 0; number_i <  100; number_i++){    
                 char * word_after_front_prefix_cap_full = number_prefix_front(number_i, cap_prefix_full(word));
                 check_all_dir_passwords(word_after_front_prefix_cap_full);   
             }
             break;
         }
 
-        case 'd':{
+        case 'g':{ // BACK PREFIX
             for ( int number_i = 0; number_i <  100; number_i++){
                 check_all_dir_passwords(number_prefix_back(number_i, word));   
+            }
+            
+            break;
+        }
+
+        case 'h':{ // BACK PREFIX FIRST LETTER
+            for ( int number_i = 0; number_i <  100; number_i++){
                 char * word_after_back_prefix_cap_first = number_prefix_back(number_i, cap_prefix_first(word));
                 check_all_dir_passwords(word_after_back_prefix_cap_first);   
+            }
+            
+            break;
+        }
+
+        case 'i':{ // BACK PREFIX ALL BIG
+            for ( int number_i = 0; number_i <  100; number_i++){ 
                 char * word_after_back_prefix_cap_full = number_prefix_back(number_i,  cap_prefix_full(word));
                 check_all_dir_passwords(word_after_back_prefix_cap_full);   
-
             }
             
             break;
@@ -369,30 +410,46 @@ void * two_word_break(){
     return NULL;
 }
 
+
+void * konsument(){
+    pthread_mutex_lock(&mutex);
+    int N = 0;
+    while (N <PASS_NUM)
+    {   
+        pthread_cond_wait(&cond, &mutex);
+    }
+    pthread_mutex_unlock(&mutex);
+
+    return NULL;
+}
+
 int main(){
     get_passwords("hasla.txt");
     WORD_NUM = get_number_of_lines("dir.txt") +1;
-    pthread_t lamacze[6];
+    pthread_t lamacze[11];
+    pthread_t konsument_a;
+    pthread_mutex_init(&mutex, NULL);
+    pthread_cond_init(&cond, NULL);
 
+    
     pthread_create(&lamacze[0], NULL, basic_break, (void *) 'a');
     pthread_create(&lamacze[1], NULL, basic_break, (void *) 'b');
     pthread_create(&lamacze[2], NULL, basic_break, (void *) 'c');
     pthread_create(&lamacze[3], NULL, basic_break, (void *) 'd');
-    pthread_create(&lamacze[4], NULL, basic_break, (void *) 'f');
-    pthread_create(&lamacze[5], NULL, two_word_break, NULL);
+    pthread_create(&lamacze[4], NULL, basic_break, (void *) 'e');
+    pthread_create(&lamacze[5], NULL, basic_break, (void *) 'f');
+    pthread_create(&lamacze[6], NULL, basic_break, (void *) 'g');
+    pthread_create(&lamacze[7], NULL, basic_break, (void *) 'h');
+    pthread_create(&lamacze[8], NULL, basic_break, (void *) 'i');
+    pthread_create(&lamacze[9], NULL, basic_break, (void *) 'j');
+    pthread_create(&lamacze[10], NULL, two_word_break, NULL);
+    pthread_create(&konsument_a, NULL, konsument, NULL);
 
-    pthread_join(lamacze[0], NULL);
-    printf("Przyszedl\n");
-    pthread_join(lamacze[1], NULL);
-    printf("Przyszedl\n");
-    pthread_join(lamacze[2], NULL);
-    printf("Przyszedl\n");
-    pthread_join(lamacze[3], NULL);
-    printf("Przyszedl\n");
-    pthread_join(lamacze[4], NULL);
-    printf("Przyszedl\n");
-    pthread_join(lamacze[5], NULL);
-    printf("Przyszedl\n");
+    for (int numerek; numerek < 11; numerek++){
+        pthread_join(lamacze[numerek], NULL);
+        printf("Przyszedl\n");
+    }
 
+    pthread_join(konsument, NULL);
 
 }
