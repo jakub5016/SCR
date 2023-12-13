@@ -233,12 +233,13 @@ void * basic_break(void * prefix_enable_arg){
         if (prefix_enable > 0){ //Number prefix gives us info about how mutch numbers we can get at the beginning and end
 
             // FULL NUMBER PREFIX 
-            for ( int number_i = 0; number_i <  100; number_i++){
-                for ( int number_j = 0; number_j <  100; number_j++){
-                    
-                    char * word_after_full_prefix = number_prefix_full(number_i, number_j, word);
-                    check_all_dir_passwords(word_after_full_prefix);   
-                    if (prefix_enable > 1){
+            if (prefix_enable > 1){
+                for ( int number_i = 0; number_i <  100; number_i++){
+                    for ( int number_j = 0; number_j <  100; number_j++){
+                        
+                        char * word_after_full_prefix = number_prefix_full(number_i, number_j, word);
+                        check_all_dir_passwords(word_after_full_prefix);   
+
                         char * word_after_cap_full = cap_prefix_full(word);
                         char * word_after_cap_first = cap_prefix_first(word);
 
@@ -246,18 +247,19 @@ void * basic_break(void * prefix_enable_arg){
                         check_all_dir_passwords(word_after_front_prefix_cap_first);   
                         char * word_after_front_prefix_cap_full = number_prefix_full(number_i,number_j ,word_after_cap_full);
                         check_all_dir_passwords(word_after_front_prefix_cap_full);   
+                        
                     }
                 }
             }
 
             // FRONT NUMBER PREFIX
-            for ( int number_i = 0; number_i <  100; number_i++){    
-                // Basic ver            
-                char * word_after_front_prefix = number_prefix_front(number_i, word);
-                check_all_dir_passwords(word_after_front_prefix);   
-                
-                //Adding caps
-                if (prefix_enable > 1){
+            if (prefix_enable > 2){
+                for ( int number_i = 0; number_i <  100; number_i++){    
+                    // Basic ver            
+                    char * word_after_front_prefix = number_prefix_front(number_i, word);
+                    check_all_dir_passwords(word_after_front_prefix);   
+                    
+                    //Adding caps
                     char * word_after_cap_full = cap_prefix_full(word);
                     char * word_after_cap_first = cap_prefix_first(word);
 
@@ -265,13 +267,15 @@ void * basic_break(void * prefix_enable_arg){
                     check_all_dir_passwords(word_after_front_prefix_cap_first);   
                     char * word_after_front_prefix_cap_full = number_prefix_front(number_i, word_after_cap_full);
                     check_all_dir_passwords(word_after_front_prefix_cap_full);   
+
                 }
             }
+            if (prefix_enable > 2){
             // BACK NUMBER PREFIX
-            for ( int number_i = 0; number_i <  100; number_i++){
-                char * word_after_back_prefix = number_prefix_back(number_i, word);
-                check_all_dir_passwords(word_after_back_prefix);   
-                if (prefix_enable > 1){
+                for ( int number_i = 0; number_i <  100; number_i++){
+                    char * word_after_back_prefix = number_prefix_back(number_i, word);
+                    check_all_dir_passwords(word_after_back_prefix);   
+
                     char * word_after_cap_full = cap_prefix_full(word);
                     char * word_after_cap_first = cap_prefix_first(word);
 
@@ -279,14 +283,13 @@ void * basic_break(void * prefix_enable_arg){
                     check_all_dir_passwords(word_after_back_prefix_cap_first);   
                     char * word_after_back_prefix_cap_full = number_prefix_back(number_i, word_after_cap_full);
                     check_all_dir_passwords(word_after_back_prefix_cap_full);   
+
                 }
             }
         } 
         else{
-            if (prefix_enable > -1){
-                check_all_dir_passwords(cap_prefix_full(word));
-                check_all_dir_passwords(cap_prefix_first(word));
-            }
+            check_all_dir_passwords(cap_prefix_full(word));
+            check_all_dir_passwords(cap_prefix_first(word));
             check_all_dir_passwords(word);
         }
     }
@@ -299,7 +302,7 @@ void * basic_break(void * prefix_enable_arg){
 int main(){
     get_passwords("hasla.txt");
     WORD_NUM = get_number_of_lines("dir.txt") +1;
-    basic_break((void *)2);
+    basic_break((void *)3);
     // pthread_t lamacze[3];
 
     // pthread_create(&lamacze[0], NULL, basic_break, (void *) 0);
