@@ -28,24 +28,12 @@ void bytes2md5(const char *data, int len, char *md5buf) {
 	}
 }
 
-int check_pass(char * pass, char * correct_pass){
-    char md5[33]; // 32 characters + null terminator
-    bytes2md5(pass, strlen(pass), md5);
-    int isTheSame = 1;
-
-    for (int i= 0; i<33; i++){
-        if (correct_pass[i] != md5[i]){
-            isTheSame = 0;
-            break;
-        }
-    }
-    return isTheSame;
-}
-
 void check_all_dir_passwords(char * word){
     for (int z =0; z < PASS_NUM; z++){
         if(IS_PASSWORD_GUESSED[z] == 0 ){
-            if (check_pass(word, PASSWORDS[z])){
+            char md5[33]; // 32 characters + null terminator
+            bytes2md5(word, strlen(word), md5);
+            if (!strcmp(md5, PASSWORDS[z])){
                 printf("HASLO nr. %d, w md5 jest to %s, zostalo zlamane jest to \"%s\" w md5 jest to ", z, PASSWORDS[z], word);
                 IS_PASSWORD_GUESSED[z] = 1;
                 char md5[33]; // 32 characters + null terminator
