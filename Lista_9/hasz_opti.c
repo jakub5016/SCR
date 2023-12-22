@@ -438,6 +438,6 @@ int main(){
         printf("Przyszedl\n");
     }
 
-    pthread_join(konsument, NULL);  
+    pthread_join(konsument, NULL);
 
 }
