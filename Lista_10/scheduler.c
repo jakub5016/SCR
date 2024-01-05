@@ -88,23 +88,6 @@ int main(int argc, char* argv[]){
 
             }
         }
-
-        // for (int i = 0; i < len - (len % 6); i = i +6){
-        //     printf("ID=%c, priority=%c, exec=%c\n",buffer[2+i], buffer[4+i], buffer[6+i]);
-        //     switch (type)
-        //     {
-        //     case 0:
-        //         current_process.id = buffer[2+i] - '0';
-
-        //         que.list[que.current_position] = current_process;
-        //         que.current_position = que.current_position +1;
-        //         break;
-            
-        //     default:
-        //         break;
-        //     }
-        // }
-
         printf("\n--------------------------------------------\n");
         time++;
     }
