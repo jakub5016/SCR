@@ -42,9 +42,10 @@ int pop(int i) {
     return 0;
 }
 void printf_process_info(struct proscess_info info ){
-    printf("ID = %d\n", info.id);
-    printf("Priority = %d\n", info.priority);
-    printf("Exec time = %d\n", info.exec_time);
+    fprintf(stdout, "ID = %d\n", info.id);
+    fflush(stdout);  
+    // fprintf(stdout, "Priority = %d\n", info.priority);
+    // fprintf(stdout, "Exec time = %d\n", info.exec_time);
 }
 
 int FCFS(){
@@ -77,8 +78,9 @@ int main(int argc, char* argv[]){
     QUE.current_position = 0;
 
     while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+        buffer[strcspn(buffer, "\n")] = '\0';  // Remove newline character if present
         len = strlen(buffer) - 2;
-        printf("Time:%d\n", time);
+        // printf("Time:%d\n", time);
         
         int i = 2;
         int val = 0;
@@ -129,12 +131,11 @@ int main(int argc, char* argv[]){
         }
 
         FCFS();
-        printf("\n--------------------------------------------\n");
         time++;
     }
     
 
-    while (FCFS() != -1){printf("\n--------------------------------------------\n");}
+    while (FCFS() != -1){fflush(stdout);}
     
     return 0;   
 
