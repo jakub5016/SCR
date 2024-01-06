@@ -19,10 +19,52 @@ struct queue
 };
 
 
+struct queue QUE;
+
+int pop(int i) {
+    if (QUE.current_position == 0) {
+        // Queue is empty
+        return -1;
+    }
+
+    if (i < 0 || i >= QUE.current_position) {
+        // Invalid index
+        return -1;
+    }
+
+    // Shift elements after the specified index to fill the gap
+    for (int j = i; j < QUE.current_position - 1; j++) {
+        QUE.list[j] = QUE.list[j + 1];
+    }
+
+    QUE.current_position--;
+
+    return 0;
+}
 void printf_process_info(struct proscess_info info ){
     printf("ID = %d\n", info.id);
     printf("Priority = %d\n", info.priority);
     printf("Exec time = %d\n", info.exec_time);
+}
+
+int FCFS(){
+    if (QUE.current_position == 0) {
+        // Queue is empty
+        return -1;
+    }
+
+    printf_process_info(QUE.list[0]);
+    QUE.list[0].exec_time = QUE.list[0].exec_time - 1;
+    if (QUE.list[0].exec_time == 0){
+        if(pop(0) == -1){
+            return -1;
+        };
+    }
+    return 0;
+}
+
+int SJF(){
+    
 }
 
 int main(int argc, char* argv[]){
@@ -30,10 +72,9 @@ int main(int argc, char* argv[]){
     size_t len;
     int time =0;
     int type = 0;
-    
-    struct queue que;
-    que.current_position = 0;
     struct proscess_info current_process;
+    
+    QUE.current_position = 0;
 
     while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
         len = strlen(buffer) - 2;
@@ -55,11 +96,9 @@ int main(int argc, char* argv[]){
             else {
                 if (buffer[i + 1] > 32) {
                     val = ((buffer[i] - '0') * 10) + (buffer[i + 1] - '0');
-                    // printf("\n%c, %c\n", buffer[i], buffer[i+1]);
                     i = i + 3;
                 } else {
                     val = (buffer[i] - '0');
-                    // printf("\n%c\n", buffer[i]);
                     i = i +2;
                 }
 
@@ -79,18 +118,24 @@ int main(int argc, char* argv[]){
                 }
 
                 if (type == 2){
-                    que.list[que.current_position] = current_process;
-                    printf_process_info(que.list[que.current_position]);
-                    que.current_position = que.current_position +1;
+                    QUE.list[QUE.current_position] = current_process;
+                    // printf_process_info(QUE.list[QUE.current_position]);
+                    QUE.current_position = QUE.current_position +1;
                 }
                 
                 type = (type +1)%3;
 
             }
         }
+
+        FCFS();
         printf("\n--------------------------------------------\n");
         time++;
     }
+    
+
+    while (FCFS() != -1){printf("\n--------------------------------------------\n");}
+    
     return 0;   
 
 }
