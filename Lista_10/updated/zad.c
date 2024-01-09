@@ -3,16 +3,26 @@
 #include <string.h>
 #define AMMOUT 10
 
+struct taczka
+{
+    int id, weight, ammout;
+    char rockType[100];
+};
+
+
+struct taczka tablicaTaczek[1000];
+int pozycjaNaTablicy = 0;
 
 int main(){
     char buffer[1000];
     FILE *fptr;
     fptr = fopen("dane.txt","read");
 
+    struct taczka pomocnicza;
+
     int minute = 0;
     int type = 0;
-    int id, weight, ammout;
-    char rockType[100];
+
 
     while (fgets(buffer,sizeof(buffer), fptr) != NULL)
     {
@@ -29,49 +39,51 @@ int main(){
                 switch (type)
                 {
                 case 0: // Szukamy ID
-                    id = buffer[i] - '0';
+                    pomocnicza.id = buffer[i] - '0';
                     if ((((buffer[i + 1]) != ' ') && (buffer[i+1] != '\n')) && (buffer[i+1] != '\0')){
-                        id = (id*10) + (buffer[i+1] - '0');
+                        pomocnicza.id = (pomocnicza.id*10) + (buffer[i+1] - '0');
                         i++;
                     }
 
-                    printf("    ID = %d uzyskany z: %c oraz %c\n", id, buffer[i],  buffer[i-1]);
+                    printf("    ID = %d uzyskany z: %c oraz %c\n", pomocnicza.id, buffer[i],  buffer[i-1]);
                     break;
 
                 case 1: // Szukamy slowa
                     int j = 0;
                     while (buffer[i] != ' ')
                     {
-                        rockType[j] = buffer[i];
+                        pomocnicza.rockType[j] = buffer[i];
                         i++;
                         j++;
                     }
-                    rockType[j] = '\0';
-                    printf("    Typ kamienia:%s\n", rockType);
+                    pomocnicza.rockType[j] = '\0';
+                    printf("    Typ kamienia:%s\n", pomocnicza.rockType);
                     i--;
                     break;
 
                 case 2: // Szukamy wagi
-                    weight = buffer[i] - '0';
+                    pomocnicza.weight = buffer[i] - '0';
                     if ((((buffer[i + 1]) != ' ') && (buffer[i+1] != '\n')) && (buffer[i+1] != '\0')){
-                        weight = (id*10) + (buffer[i+1] - '0');
+                        pomocnicza.weight = (pomocnicza.weight*10) + (buffer[i+1] - '0');
                         i++;
                     }
 
-                    printf("    Waga = %d uzyskany z: %c oraz %c\n", weight, buffer[i],  buffer[i-1]);
+                    printf("    Waga = %d uzyskany z: %c oraz %c\n", pomocnicza.weight, buffer[i],  buffer[i-1]);
 
                     break;
                 
                 case 3: // Szukamy ilości i KOŃCZYMY PRZESZUKIWANIE TEGO KAMULCA
-                    ammout = buffer[i] - '0';
+                    pomocnicza.ammout = buffer[i] - '0';
                     if ((((buffer[i + 1]) != ' ') && (buffer[i+1] != '\n')) && (buffer[i+1] != '\0')){
-                        ammout = (id*10) + (buffer[i+1] - '0');
+                        pomocnicza.ammout = (pomocnicza.ammout*10) + (buffer[i+1] - '0');
                         i++;
                     }
 
-                    printf("    Ilosc kamieni = %d uzyskany z: %c oraz %c\n", ammout, buffer[i],  buffer[i-1]);
+                    printf("    Ilosc kamieni = %d uzyskany z: %c oraz %c\n", pomocnicza.ammout, buffer[i],  buffer[i-1]);
+                    /// WYWAL TĄ TACZKEEEEEEEEEEE
 
-
+                    tablicaTaczek[pozycjaNaTablicy] = pomocnicza;
+                    pozycjaNaTablicy++;
                     printf("\n");
 
                     break;
@@ -87,6 +99,10 @@ int main(){
         printf("\n\n");
 
     }
-    
+
+    for (int i=0; i< pozycjaNaTablicy; i++){
+        printf("Taczka o ID = %d zawierająca %s jest w tablicy pod numerem: %d\n", tablicaTaczek[i].id, tablicaTaczek[i].rockType, i);
+    }
+
     return 0;
 }
