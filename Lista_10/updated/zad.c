@@ -13,6 +13,9 @@ struct taczka
     char rockType[100];
 };
 
+void printfTaczka(struct taczka pomocnicza){
+    printf("    wheelbarrow arrived <%d %s %d [%d]>\n", pomocnicza.id, pomocnicza.rockType, pomocnicza.weight, pomocnicza.ammout);
+}
 
 struct taczka tablicaTaczek[1000];
 int pozycjaNaTablicy = 0;
@@ -24,6 +27,7 @@ int main(int argc, char *argv[]){
     }
 
     iloscRobotow = atoi(argv[1]);
+    printf("%d robots in the mine\n", iloscRobotow);
     kwantCzasu = atoi(argv[2]);
     FILE *fptr;
     if (strcmp(argv[3], "-")){
@@ -48,7 +52,7 @@ int main(int argc, char *argv[]){
     while (fgets(buffer,sizeof(buffer), fptr) != NULL)
     {
         minute = buffer[0] - '0';
-        printf("MINUTA: %d\n", minute);
+        printf("Moment %d\n", minute);
         type = 0;
         for (int i = 2; ; i++){
             if ((buffer[i] == '\0') || (buffer[i] == '\n')){
@@ -66,7 +70,6 @@ int main(int argc, char *argv[]){
                         i++;
                     }
 
-                    printf("    ID = %d uzyskany z: %c oraz %c\n", pomocnicza.id, buffer[i],  buffer[i-1]);
                     break;
 
                 case 1: // Szukamy slowa
@@ -78,7 +81,6 @@ int main(int argc, char *argv[]){
                         j++;
                     }
                     pomocnicza.rockType[j] = '\0';
-                    printf("    Typ kamienia:%s\n", pomocnicza.rockType);
                     i--;
                     break;
 
@@ -89,7 +91,6 @@ int main(int argc, char *argv[]){
                         i++;
                     }
 
-                    printf("    Waga = %d uzyskany z: %c oraz %c\n", pomocnicza.weight, buffer[i],  buffer[i-1]);
 
                     break;
                 
@@ -99,14 +100,11 @@ int main(int argc, char *argv[]){
                         pomocnicza.ammout = (pomocnicza.ammout*10) + (buffer[i+1] - '0');
                         i++;
                     }
-
-                    printf("    Ilosc kamieni = %d uzyskany z: %c oraz %c\n", pomocnicza.ammout, buffer[i],  buffer[i-1]);
                     /// WYWAL TĄ TACZKEEEEEEEEEEE
 
                     tablicaTaczek[pozycjaNaTablicy] = pomocnicza;
                     pozycjaNaTablicy++;
-                    printf("\n");
-
+                    printfTaczka(pomocnicza);
                     break;
                 default:
                     break;
@@ -116,9 +114,6 @@ int main(int argc, char *argv[]){
                 type = (type +1)%4;
             }
         }
-
-        printf("\n\n");
-
     }
 
     return 0;
