@@ -3,6 +3,10 @@
 #include <string.h>
 #define AMMOUT 10
 
+int iloscRobotow = 0;
+int kwantCzasu = 0;
+int typAlgorytmu = 2; //FCFS
+
 struct taczka
 {
     int id, weight, ammout;
@@ -13,11 +17,28 @@ struct taczka
 struct taczka tablicaTaczek[1000];
 int pozycjaNaTablicy = 0;
 
-int main(){
-    char buffer[1000];
-    FILE *fptr;
-    fptr = fopen("dane.txt","read");
+int main(int argc, char *argv[]){
+    if (argc < 4){
+        printf("Niewystarczajaca ilosc argumentow wywoalania\n");
+        return -1;
+    }
 
+    iloscRobotow = atoi(argv[1]);
+    kwantCzasu = atoi(argv[2]);
+    FILE *fptr;
+    if (strcmp(argv[3], "-")){
+        fptr = fopen(argv[3],"read");
+        if (fptr == NULL){
+            printf("Nie istnieje plik o takiej nazwie\n");
+            return -1;
+        }
+    }
+    else{
+        fptr = stdin;
+    }
+    typAlgorytmu = atoi(argv[4]);
+
+    char buffer[1000];
     struct taczka pomocnicza;
 
     int minute = 0;
@@ -98,10 +119,6 @@ int main(){
 
         printf("\n\n");
 
-    }
-
-    for (int i=0; i< pozycjaNaTablicy; i++){
-        printf("Taczka o ID = %d zawierająca %s jest w tablicy pod numerem: %d\n", tablicaTaczek[i].id, tablicaTaczek[i].rockType, i);
     }
 
     return 0;
