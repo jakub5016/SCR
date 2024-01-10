@@ -7,18 +7,44 @@ int iloscRobotow = 0;
 int kwantCzasu = 0;
 int typAlgorytmu = 2; //FCFS
 
+// FCFS Var
+int lastTaczka = 0;
+// RR Var
+
+
 struct taczka
 {
-    int id, weight, ammout;
+    int id, weight, ammout, timeToUnload;
     char rockType[100];
 };
 
 void printfTaczka(struct taczka pomocnicza){
-    printf("    wheelbarrow arrived <%d %s %d [%d]>\n", pomocnicza.id, pomocnicza.rockType, pomocnicza.weight, pomocnicza.ammout);
+    printf("    wheelbarrow arrived <%d %s %d %d [%d]>\n", pomocnicza.id, pomocnicza.rockType, pomocnicza.weight, pomocnicza.ammout, pomocnicza.weight * pomocnicza.ammout);
 }
 
 struct taczka tablicaTaczek[1000];
 int pozycjaNaTablicy = 0;
+
+void FCFS(){
+    printf("        ");
+    for (int i = 0; i < iloscRobotow; i++){
+        if ((lastTaczka + i) < pozycjaNaTablicy){
+            while ((tablicaTaczek[lastTaczka + i].timeToUnload == 0) && ((lastTaczka + i) < pozycjaNaTablicy)) {
+                lastTaczka++;
+            }
+
+
+            printf("[%s        %d]",tablicaTaczek[lastTaczka + i].rockType, tablicaTaczek[lastTaczka + i].timeToUnload);
+            tablicaTaczek[lastTaczka + i].timeToUnload = tablicaTaczek[lastTaczka + i].timeToUnload -1;
+
+        }
+        else{
+            printf("[        ]");
+        }
+        
+    }
+    printf("\n\n");
+}
 
 int main(int argc, char *argv[]){
     if (argc < 4){
@@ -102,6 +128,7 @@ int main(int argc, char *argv[]){
                     }
                     /// WYWAL TĄ TACZKEEEEEEEEEEE
 
+                    pomocnicza.timeToUnload = pomocnicza.ammout * pomocnicza.weight;
                     tablicaTaczek[pozycjaNaTablicy] = pomocnicza;
                     pozycjaNaTablicy++;
                     printfTaczka(pomocnicza);
@@ -114,7 +141,46 @@ int main(int argc, char *argv[]){
                 type = (type +1)%4;
             }
         }
+        switch (typAlgorytmu)
+        {
+        case 2:
+            FCFS();
+            break;
+        
+        default:
+            break;
+        }
     }
 
+    int isEmpty = 0;
+    if (typAlgorytmu < 1 || typAlgorytmu > 2){
+        return -1;
+    }
+    while (isEmpty == 0)
+    {
+        minute++;
+        isEmpty = 1;
+        for (int i = 0; i < pozycjaNaTablicy; i++)
+        {
+            if (tablicaTaczek[i].timeToUnload != 0){
+                isEmpty = 0;
+            }
+        }
+
+        if (isEmpty == 0){
+            printf("Moment %d\n", minute);
+            switch (typAlgorytmu)
+            {
+            case 2:
+                FCFS();
+                break;
+            
+            default:
+                break;
+            }
+        }
+        
+    }
+    
     return 0;
 }

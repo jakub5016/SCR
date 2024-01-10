@@ -1,4 +1,3 @@
-0 12 zloto 3 2 
-1 2 rubiny 5 3 3 agaty 1 2
-2 2 rubiny 5 3 
-3 4 turkus 2 1
+0 1 gold 1 2 
+1 2 rubies 3 1 3 agates 1 2
+2 4 turquoise 1 2
