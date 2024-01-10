@@ -25,6 +25,48 @@ void printfTaczka(struct taczka pomocnicza){
 struct taczka tablicaTaczek[1000];
 int pozycjaNaTablicy = 0;
 
+void pop(int number){
+    pozycjaNaTablicy = pozycjaNaTablicy -1;
+    for (int i = number; i < pozycjaNaTablicy; i++)
+    {
+        tablicaTaczek[i] = tablicaTaczek[i+1];
+    }
+    
+}
+
+
+void RR(){
+    struct taczka pomocnicza;
+    printf("        ");
+    for (int i = 0; i < iloscRobotow; i++){
+        if (i < pozycjaNaTablicy){
+            printf("[%s        %d]",tablicaTaczek[i].rockType, tablicaTaczek[i].timeToUnload);
+            tablicaTaczek[i].timeToUnload = tablicaTaczek[i].timeToUnload -1;
+        }
+        else{
+            printf("[        ]");
+        }
+        
+    }
+
+    for (int i = 0; i < iloscRobotow; i++)
+    {
+        if (i < pozycjaNaTablicy){
+            if (tablicaTaczek[0].timeToUnload != 0){
+                pomocnicza = tablicaTaczek[0];
+                pop(0);
+                tablicaTaczek[pozycjaNaTablicy] = pomocnicza;
+                pozycjaNaTablicy++; 
+            }
+            else{
+                pop(i);
+            }
+        }
+    }
+    
+    printf("\n\n");
+}
+
 void FCFS(){
     printf("        ");
     for (int i = 0; i < iloscRobotow; i++){
@@ -146,7 +188,9 @@ int main(int argc, char *argv[]){
         case 2:
             FCFS();
             break;
-        
+        case 1:
+            RR();
+            break;
         default:
             break;
         }
@@ -174,7 +218,9 @@ int main(int argc, char *argv[]){
             case 2:
                 FCFS();
                 break;
-            
+            case 1:
+                RR();
+                break;
             default:
                 break;
             }
