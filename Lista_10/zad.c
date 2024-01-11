@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define AMMOUT 10
+#define MAXROBOTS 10
 
 int iloscRobotow = 0;
 int kwantCzasu = 0;
@@ -10,7 +11,7 @@ int typAlgorytmu = 2; //FCFS
 // FCFS Var
 int lastTaczka = 0;
 // RR Var
-int kwantCzasuCounter = 0;
+int kwantCzasuCounters[MAXROBOTS];
 
 struct taczka
 {
@@ -42,31 +43,41 @@ void RR(){
         if ((i < pozycjaNaTablicy) && (tablicaTaczek[i].timeToUnload != 0)){
             printf("[%s        %d]",tablicaTaczek[i].rockType, tablicaTaczek[i].timeToUnload);
             tablicaTaczek[i].timeToUnload = tablicaTaczek[i].timeToUnload -1;
+
+            if (tablicaTaczek[i].timeToUnload == 0){
+                kwantCzasuCounters[i] = (kwantCzasu -1);                   
+            }
         }
         else{
             printf("[        ]");
         }
         
     }
-    if ((kwantCzasu-1) == kwantCzasuCounter){
-        for (int i = 0; i < iloscRobotow; i++)
-        {
-            if (i < pozycjaNaTablicy){
-                if (tablicaTaczek[0].timeToUnload != 0){
-                    pomocnicza = tablicaTaczek[0];
-                    pop(0);
-                    tablicaTaczek[pozycjaNaTablicy] = pomocnicza;
-                    pozycjaNaTablicy++; 
-                }
-                else{
-                    pop(0); 
+    for (int j =0; j< iloscRobotow; j++){
+        if ((kwantCzasu-1) == kwantCzasuCounters[j]){
+            for (int i = 0; i < iloscRobotow; i++)
+            {
+                if (i < pozycjaNaTablicy){
+                    if (tablicaTaczek[0].timeToUnload != 0){
+                        pomocnicza = tablicaTaczek[0];
+                        pop(0);
+                        tablicaTaczek[pozycjaNaTablicy] = pomocnicza;
+                        pozycjaNaTablicy++; 
+                    }
+                    else{
+                        pop(0); 
+                    }
                 }
             }
-        }
 
+        }
     }
-    kwantCzasuCounter = (kwantCzasuCounter +1)%kwantCzasu;
-   
+
+    for (int k = 0; k < iloscRobotow; k++)
+    {
+        kwantCzasuCounters[k] = (kwantCzasuCounters[k] +1)%kwantCzasu;
+    }
+       
     printf("\n\n");
 }
 
@@ -96,7 +107,6 @@ int main(int argc, char *argv[]){
         printf("Niewystarczajaca ilosc argumentow wywoalania\n");
         return -1;
     }
-
     iloscRobotow = atoi(argv[1]);
     printf("%d robots in the mine\n", iloscRobotow);
     kwantCzasu = atoi(argv[2]);
@@ -112,6 +122,20 @@ int main(int argc, char *argv[]){
         fptr = stdin;
     }
     typAlgorytmu = atoi(argv[4]);
+    if (typAlgorytmu == 1){
+        printf("RR with quantum %d\n", kwantCzasu);        
+        for (int i = 0; i < MAXROBOTS; i++)
+        {
+            if (i >iloscRobotow){
+                kwantCzasuCounters[i] = -1;
+            }
+            else{
+                kwantCzasuCounters[i] = 0;
+            }
+        }
+        
+
+    }
 
     char buffer[1000];
     struct taczka pomocnicza;
@@ -203,7 +227,7 @@ int main(int argc, char *argv[]){
     if (typAlgorytmu < 1 || typAlgorytmu > 2){
         return -1;
     }
-    while ((isEmpty == 0) && (minute < 30)) // Drugi argument to ułatwienie dla debugowania.
+    while ((isEmpty == 0) && (minute < 100)) // Drugi argument to ułatwienie dla debugowania.
     {
         minute++;
         isEmpty = 1;
