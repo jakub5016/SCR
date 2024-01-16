@@ -107,6 +107,11 @@ int main(int argc, char *argv[]){
         printf("Niewystarczajaca ilosc argumentow wywoalania\n");
         return -1;
     }
+
+    for (int i; i < 1000; i++){
+        tablicaTaczek[i].timeToUnload = 0;
+    }
+
     iloscRobotow = atoi(argv[1]);
     printf("%d robots in the mine\n", iloscRobotow);
     kwantCzasu = atoi(argv[2]);
@@ -231,9 +236,17 @@ int main(int argc, char *argv[]){
     {
         minute++;
         isEmpty = 1;
-        for (int i = 0; i < pozycjaNaTablicy; i++)
-        {
-            if (tablicaTaczek[i].timeToUnload != 0){
+
+        if (typAlgorytmu == 1){
+            for (int i = 0; i < pozycjaNaTablicy; i++)
+            {
+                if (tablicaTaczek[i].timeToUnload != 0){
+                    isEmpty = 0;
+                }
+            }
+        }
+        else{
+            if (tablicaTaczek[pozycjaNaTablicy-1].timeToUnload != 0){
                 isEmpty = 0;
             }
         }
