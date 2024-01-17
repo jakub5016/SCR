@@ -108,7 +108,7 @@ int main(int argc, char *argv[]){
         return -1;
     }
 
-    for (int i; i < 1000; i++){
+    for (int i = 0; i < 1000; i++){
         tablicaTaczek[i].timeToUnload = 0;
     }
 
