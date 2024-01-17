@@ -38,21 +38,7 @@ void pop(int number){
 
 void RR(){
     struct taczka pomocnicza;
-    printf("        ");
-    for (int i = 0; i < iloscRobotow; i++){
-        if ((i < pozycjaNaTablicy) && (tablicaTaczek[i].timeToUnload != 0)){
-            printf("[%s        %d]",tablicaTaczek[i].rockType, tablicaTaczek[i].timeToUnload);
-            tablicaTaczek[i].timeToUnload = tablicaTaczek[i].timeToUnload -1;
 
-            if (tablicaTaczek[i].timeToUnload == 0){
-                kwantCzasuCounters[i] = (kwantCzasu -1);                   
-            }
-        }        
-        else{
-            printf("[        ]");
-        }
-        
-    }
     for (int j =0; j< iloscRobotow; j++){
         if ((kwantCzasu-1) == kwantCzasuCounters[j]){
             for (int i = 0; i < iloscRobotow; i++)
@@ -85,7 +71,23 @@ void RR(){
     {
         kwantCzasuCounters[k] = (kwantCzasuCounters[k] +1)%kwantCzasu;
     }
-       
+
+    printf("        ");
+    for (int i = 0; i < iloscRobotow; i++){
+        if ((i < pozycjaNaTablicy) && (tablicaTaczek[i].timeToUnload != 0)){
+            printf("[%s        %d]",tablicaTaczek[i].rockType, tablicaTaczek[i].timeToUnload);
+            tablicaTaczek[i].timeToUnload = tablicaTaczek[i].timeToUnload -1;
+
+            if (tablicaTaczek[i].timeToUnload == 0){
+                kwantCzasuCounters[i] = (kwantCzasu -1);                   
+            }
+        }        
+        else{
+            printf("[        ]");
+        }
+        
+    }
+          
     printf("\n\n");
 }
 
