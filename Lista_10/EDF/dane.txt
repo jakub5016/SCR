@@ -1,0 +1,30 @@
+1 10 piryt 2 1 5 kalcyt 2 2
+2
+3 22 malachit 6 1
+4 
+5 
+6 28 turmalin 2 3
+7
+8 33 labradoryt 4 4
+9
+10 39 rubin 5 1
+11 
+12
+13
+14
+15 46 opal 2 2
+16
+17
+18
+19
+20 48 serpentynit 3 2
+21
+22
+23 58 zloto 2 2
+24
+25
+26
+27
+28
+29
+30 58 granit 2 3
