@@ -1,0 +1,160 @@
+2 robots in the mine
+Moment 1
+    wheelbarrow arrived <10 piryt 2 1 [2]>
+    wheelbarrow arrived <5 kalcyt 2 2 [4]>
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [piryt        2][kalcyt        4]
+
+Moment 2
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [piryt        1][kalcyt        3]
+
+Moment 3
+    wheelbarrow arrived <22 malachit 6 1 [6]>
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [malachit        6][kalcyt        2]
+
+Moment 4
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [malachit        5][kalcyt        1]
+
+Moment 5
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [malachit        4][        ]
+
+Moment 6
+    wheelbarrow arrived <28 turmalin 2 3 [6]>
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [malachit        3][turmalin        6]
+
+Moment 7
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [malachit        2][turmalin        5]
+
+Moment 8
+    wheelbarrow arrived <33 labradoryt 4 4 [16]>
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [labradoryt        16][turmalin        4]
+
+Moment 9
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [labradoryt        15][turmalin        3]
+
+Moment 10
+    wheelbarrow arrived <39 rubin 5 1 [5]>
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [rubin        5][labradoryt        14]
+
+Moment 11
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [rubin        4][labradoryt        13]
+
+Moment 12
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [rubin        3][labradoryt        12]
+
+Moment 13
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [rubin        2][labradoryt        11]
+
+Moment 14
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [rubin        1][labradoryt        10]
+
+Moment 15
+    wheelbarrow arrived <46 opal 2 2 [4]>
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [opal        4][labradoryt        9]
+
+Moment 16
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [opal        3][labradoryt        8]
+
+Moment 17
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [opal        2][labradoryt        7]
+
+Moment 18
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [opal        1][labradoryt        6]
+
+Moment 19
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [turmalin        2][labradoryt        5]
+
+Moment 20
+    wheelbarrow arrived <48 serpentynit 3 2 [6]>
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [serpentynit        6][labradoryt        4]
+
+Moment 21
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [serpentynit        5][labradoryt        3]
+
+Moment 22
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [serpentynit        4][labradoryt        2]
+
+Moment 23
+    wheelbarrow arrived <58 zloto 2 2 [4]>
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [zloto        4][serpentynit        3]
+
+Moment 24
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [zloto        3][serpentynit        2]
+
+Moment 25
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [zloto        2][serpentynit        1]
+
+Moment 26
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [zloto        1][labradoryt        1]
+
+Moment 27
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [turmalin        1][malachit        1]
+
+Moment 28
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [        ][        ]
+
+Moment 29
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [        ][        ]
+
+Moment 30
+    wheelbarrow arrived <58 granit 2 3 [6]>
+
+------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------
+        [granit        6][        ]

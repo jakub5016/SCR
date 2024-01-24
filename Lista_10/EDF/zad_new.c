@@ -29,7 +29,8 @@ int pozycjaNaTablicy = 0;
 
 void pop(int number){
     pozycjaNaTablicy = pozycjaNaTablicy -1;
-    for (int i = number; i < pozycjaNaTablicy; i++)
+    // printf("%d", pozycjaNaTablicy);
+    for (int i = number; i <= pozycjaNaTablicy; i++)
     {
         tablicaTaczek[i] = tablicaTaczek[i+1];
     }
@@ -44,33 +45,34 @@ void switch_table(int index_i, int intex_j){
 }
 
 void EDF(){
-    for (int i = 0; i < iloscRobotow; i++){
-        if (tablicaTaczek[i].timeToUnload != 0){
-            printf("[%s        %d]",tablicaTaczek[i].rockType, tablicaTaczek[i].timeToUnload);
-
-        }
-        else{
-            printf("[        ]");
-        }
-        
-    }
     printf("\n");
-    // printf("------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------\n");
+    printf("------------------------MOMENT DZIAŁANIA SCHEDULERA------------------------\n");
+
+    for (int l =iloscRobotow; l < pozycjaNaTablicy; l++){
+        for (int m =l; m < pozycjaNaTablicy; m++){
+            if(tablicaTaczek[l].id < tablicaTaczek[m].id){
+                switch_table(l, m);
+            }
+        }
+    }
+
 
     for (int h =0; h < pozycjaNaTablicy; h++){
         if (tablicaTaczek[h].timeToUnload == 0){
-            printf("%d\n", h);
-            pop(h);
+            tablicaTaczek[h].id = -1;
+            switch_table(h, iloscRobotow);
+
         }
     }
 
-    // for (int j =0; j < pozycjaNaTablicy; j++){
-    //     for (int k =j; k < pozycjaNaTablicy; k++){
-    //         if (tablicaTaczek[k].id < tablicaTaczek[k+1].id){
-    //             switch_table(k, k+1);
-    //         }
-    //     }
-    // }
+
+    for (int j = 0; j< iloscRobotow; j++){
+        for (int k = iloscRobotow; k <= pozycjaNaTablicy; k++){
+            if(tablicaTaczek[j].id < tablicaTaczek[k].id){
+                switch_table(j, k);
+            }
+        }
+    }
 
     printf("        ");
     for (int i = 0; i < iloscRobotow; i++){
@@ -292,7 +294,7 @@ int main(int argc, char *argv[]){
     }
 
     int isEmpty = 0;
-    if (typAlgorytmu < 1 || typAlgorytmu > 2){
+    if (typAlgorytmu < 1 || typAlgorytmu > 3){
         return -1;
     }
     while ((isEmpty == 0) && (minute < 100)) // Drugi argument to ułatwienie dla debugowania.
