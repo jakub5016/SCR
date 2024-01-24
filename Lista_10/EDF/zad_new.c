@@ -302,7 +302,7 @@ int main(int argc, char *argv[]){
         minute++;
         isEmpty = 1;
 
-        if (typAlgorytmu == 1){
+        if ((typAlgorytmu == 1) || (typAlgorytmu == 3)){
             for (int i = 0; i < pozycjaNaTablicy; i++)
             {
                 if (tablicaTaczek[i].timeToUnload != 0){
@@ -310,7 +310,7 @@ int main(int argc, char *argv[]){
                 }
             }
         }
-        else{
+        else if (typAlgorytmu==2){
             if (tablicaTaczek[pozycjaNaTablicy-1].timeToUnload != 0){
                 isEmpty = 0;
             }
